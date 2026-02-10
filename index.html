@@ -1,75 +1,158 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guns.lol Style Page</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('background.jpg'); /* Replace with your background image */
-            background-size: cover;
-            background-position: center;
-            font-family: Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>xzy</title>
 
-        .container {
-            text-align: center;
-            background: rgba(0,0,0,0.5); /* semi-transparent overlay */
-            padding: 30px;
-            border-radius: 20px;
-            color: #fff;
-        }
+<style>
+body {
+    margin: 0;
+    background: black;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    overflow: hidden;
+    color: white;
+}
 
-        .avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            margin-bottom: 20px;
-            border: 3px solid #fff;
-        }
+/* RGB ANIMATION */
+@keyframes rgbFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
-        .play-button {
-            display: inline-block;
-            padding: 15px 30px;
-            background-color: #ff4444;
-            color: #fff;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 10px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
+.rgb-text {
+    background: linear-gradient(
+        90deg,
+        red,
+        orange,
+        yellow,
+        lime,
+        cyan,
+        blue,
+        violet,
+        red
+    );
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rgbFlow 6s linear infinite;
+}
 
-        .play-button:hover {
-            background-color: #ff0000;
-        }
-    </style>
+/* ENTER SCREEN */
+.enter-screen {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    cursor: pointer;
+}
+
+/* PROFILE */
+.profile {
+    display: none;
+    padding-top: 100px;
+}
+
+.card {
+    background: #111;
+    border-radius: 20px;
+    padding: 40px;
+    width: 350px;
+    margin: auto;
+    box-shadow: 0 0 40px #0f0f0f;
+}
+
+.username {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.bio {
+    margin: 20px 0;
+    font-size: 15px;
+}
+
+.stats {
+    margin: 15px 0;
+    color: #aaa;
+}
+
+.spotify {
+    margin-top: 20px;
+    background: #1db954;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    color: white;
+}
+
+audio {
+    display: none;
+}
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <img src="nigga.png" alt="Avatar" class="avatar"> <!-- Replace with your avatar -->
-        <h1>Welcome!</h1>
-        <a href="#" class="play-button" onclick="playSong()">Click to Play Song</a>
+
+<!-- ENTER PAGE -->
+<div class="enter-screen rgb-text" onclick="enterSite()">
+    CLICK TO ENTER
+</div>
+
+<!-- PROFILE PAGE -->
+<div class="profile">
+    <div class="card">
+
+        <div class="username rgb-text">xzy</div>
+
+        <div class="bio rgb-text">
+            every single love song is about you ✨
+        </div>
+
+        <div class="stats">
+            👁 Views: <span id="views"></span>
+        </div>
+
+        <div class="spotify">
+            🎵 Listening to Spotify<br>
+            Won't Live Here - Daniel Caesar
+        </div>
+
     </div>
+</div>
 
-    <audio id="bgMusic" src="di na saluhin.mp3"></audio> <!-- Replace with your song -->
+<!-- MUSIC -->
+<audio id="music" loop>
+    <source src="di na saluhin.mp3" type="audio/mpeg">
+</audio>
 
-    <script>
-        function playSong() {
-            var music = document.getElementById('bgMusic');
-            music.play();
-        }
-    </script>
+<script>
+function enterSite() {
+
+    alert("grabbed by xzy");
+
+    document.querySelector(".enter-screen").style.display = "none";
+    document.querySelector(".profile").style.display = "block";
+
+    var music = document.getElementById("music");
+    music.play();
+
+    // Local view counter
+    let views = localStorage.getItem("profile_views");
+
+    if (!views) {
+        views = 1;
+    } else {
+        views = parseInt(views) + 1;
+    }
+
+    localStorage.setItem("profile_views", views);
+    document.getElementById("views").innerText = views;
+}
+</script>
+
 </body>
 </html>
-
-
-
-
