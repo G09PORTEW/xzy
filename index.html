@@ -16,7 +16,7 @@ body { height:100vh; overflow:hidden; background:#000; color:white; }
 .overlay span { padding:20px 40px; border-radius:18px; background:rgba(255,255,255,0.08); backdrop-filter:blur(40px); box-shadow:0 0 40px rgba(255,0,85,0.5); font-size:22px; }
 
 /* Profile */
-.profile { position:absolute; top:20%; left:50%; transform:translate(-50%,-20%); text-align:center; color:white; z-index:5; }
+.profile { position:absolute; top:20%; left:50%; transform:translate(-50%,-20%); text-align:center; color:white; z-index:5; cursor:pointer; }
 .profile-canvas { position:absolute; top:0; left:0; pointer-events:none; z-index:-1; }
 .avatar { width:100px; height:100px; border-radius:50%; border:2px solid red; transition: transform 0.1s ease, box-shadow 0.1s ease; }
 .username { margin-top:10px; font-size:28px; color:red; text-shadow:0 0 5px red,0 0 10px red; }
@@ -64,7 +64,7 @@ body { height:100vh; overflow:hidden; background:#000; color:white; }
 <div class="bg"></div>
 <div class="overlay" id="overlay"><span>click to view</span></div>
 
-<div class="profile">
+<div class="profile" id="profile">
   <canvas id="profileCanvas" class="profile-canvas"></canvas>
   <img class="avatar" id="avatar" src="nigga.png" alt="Avatar">
   <div class="username">xazny</div>
@@ -73,6 +73,21 @@ body { height:100vh; overflow:hidden; background:#000; color:white; }
   <div class="animated-text" id="animatedText"></div>
   <div class="profile-views" id="profileViews">Profile Views: 0</div>
 </div>
+
+<div class="player" id="player">
+  <canvas id="waveCanvas"></canvas>
+  <img class="cover" src="IMG_5413.jpeg" alt="Album Cover" id="cover">
+  <div class="info">
+    <h3 id="songTitle">Di Na Saluhin</h3>
+    <p id="songArtist">Hev Abi</p>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+  </div>
+  <div class="time" id="time">0:00</div>
+</div>
+
+<!-- Audio element -->
+<audio id="audio"></audio>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const overlay = document.getElementById("overlay");
@@ -131,11 +146,9 @@ document.addEventListener("DOMContentLoaded", () => {
     audio.play();
   }
 
-  overlay.onclick = async () => {
-    overlay.style.display = "none";
-    if(audioCtx.state==='suspended') await audioCtx.resume();
+  function startAudio(){
+    if(audioCtx.state==='suspended') audioCtx.resume();
     playSong(currentSong);
-
     const source = audioCtx.createMediaElementSource(audio);
     source.connect(analyser);
     analyser.connect(audioCtx.destination);
@@ -144,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
       analyser.getByteFrequencyData(dataArray);
       let avg = dataArray.reduce((a,b)=>a+b,0)/dataArray.length;
 
-      // Avatar glow & pulse
+      // Avatar glow
       avatar.style.transform = `scale(${1 + avg/400})`;
       avatar.style.boxShadow = `0 0 ${avg/2}px red,0 0 ${avg}px darkred`;
 
@@ -153,24 +166,21 @@ document.addEventListener("DOMContentLoaded", () => {
       bar.style.transform = `scaleY(${1 + avg/500})`;
       bar.style.boxShadow = `0 0 ${10 + avg/2}px red`;
 
-      // Animated text
-      animatedText.style.textShadow = `0 0 ${10 + avg/2}px red,0 0 ${10 + avg/2}px darkred`;
-
-      // Wave in player (smoother)
+      // Wave in player
       waveCtx.clearRect(0,0,waveCanvas.width,waveCanvas.height);
       const colors = ["#ff4d4d","#ff0000","#b30000"];
       for(let i=0;i<3;i++){
         waveCtx.beginPath();
         waveCtx.strokeStyle = colors[i];
         waveCtx.lineWidth = 2;
-        for(let x=0;x<waveCanvas.width;x+=1){
+        for(let x=0;x<waveCanvas.width;x++){
           let y = waveCanvas.height/2 + Math.sin(x*0.03+i + Date.now()*0.003)*15*(avg/50);
           waveCtx.lineTo(x,y);
         }
         waveCtx.stroke();
       }
 
-      // Profile particles and spectrum bars
+      // Profile particles
       profileCtx.clearRect(0,0,profileCanvas.width,profileCanvas.height);
       const cx = window.innerWidth/2;
       const cy = window.innerHeight*0.2;
@@ -203,7 +213,17 @@ document.addEventListener("DOMContentLoaded", () => {
       requestAnimationFrame(animateBeat);
     }
     animateBeat();
-  };
+  }
+
+  overlay.addEventListener('click', () => {
+    overlay.style.display = 'none';
+    startAudio();
+  });
+
+  document.getElementById('profile').addEventListener('click', () => {
+    startAudio();
+    overlay.style.display = 'none';
+  });
 
   audio.ontimeupdate = () => {
     const m = Math.floor(audio.currentTime/60);
@@ -212,7 +232,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   audio.onended = () => {
-    // Play next song automatically
     currentSong = (currentSong+1)%songs.length;
     playSong(currentSong);
   };
@@ -221,7 +240,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const texts = ["wag","kang","kupal","bobo!"];
   let textIndex=0, charIndex=0, typing=true;
   function typeText(){
-    if(!texts[textIndex]) return;
     if(typing){
       if(charIndex<texts[textIndex].length){
         animatedText.textContent += texts[textIndex].charAt(charIndex);
@@ -247,5 +265,6 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
 
 
