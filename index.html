@@ -73,22 +73,6 @@ body { height:100vh; overflow:hidden; background:#000; color:white; }
   <div class="animated-text" id="animatedText"></div>
   <div class="profile-views" id="profileViews">Profile Views: 0</div>
 </div>
-
-<!-- SPOTIFY PLAYER -->
-<div class="player" id="player">
-  <canvas id="waveCanvas"></canvas>
-  <img class="cover" src="IMG_5413.jpeg" alt="Album Cover" id="cover">
-  <div class="info">
-    <h3 id="songTitle">Di Na Saluhin</h3>
-    <p id="songArtist">Hev Abi</p>
-    <div class="progress"><div class="bar" id="bar"></div></div>
-  </div>
-  <div class="time" id="time">0:00</div>
-</div>
-
-<!-- Removed loop attribute -->
-<audio id="audio"></audio>
-
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const overlay = document.getElementById("overlay");
@@ -263,4 +247,5 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
 
