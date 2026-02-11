@@ -6,201 +6,79 @@
 <title>Profile</title>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
-body {
-  height: 100vh;
-  color: white;
-  overflow: hidden;
-  background: #000;
-}
+* { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
+body { height:100vh; color:white; overflow:hidden; background:#000; }
 
 /* Background */
-.bg {
-  position: fixed;
-  inset: 0;
-  background: url("https://media1.tenor.com/m/UaU5X_41E44AAAAC/vex.gif") center/cover no-repeat;
-  filter: blur(12px) brightness(0.5);
-  z-index: -2;
-}
+.bg { position:fixed; inset:0; background:url("https://media1.tenor.com/m/UaU5X_41E44AAAAC/vex.gif") center/cover no-repeat; filter:blur(12px) brightness(0.5); z-index:-2; }
 
-/* Click Overlay */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(20px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  cursor: pointer;
-}
-
-.overlay span {
-  padding: 20px 40px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(40px);
-  box-shadow: 0 0 40px rgba(255,0,85,0.5);
-  font-size: 22px;
-}
+/* Overlay click */
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(20px); display:flex; justify-content:center; align-items:center; z-index:10; cursor:pointer; }
+.overlay span { padding:20px 40px; border-radius:18px; background:rgba(255,255,255,0.08); backdrop-filter:blur(40px); box-shadow:0 0 40px rgba(255,0,85,0.5); font-size:22px; }
 
 /* Profile */
-.profile {
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%, -20%);
-  text-align: center;
-  color: white;
-}
+.profile { position:absolute; top:20%; left:50%; transform:translate(-50%,-20%); text-align:center; color:white; }
+.avatar { width:100px; height:100px; border-radius:50%; border:2px solid red; }
+.username { margin-top:10px; font-size:28px; color:red; }
+.bio { font-size:14px; margin-top:4px; }
+.sub { font-size:12px; opacity:0.6; }
 
-.avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 2px solid red;
+/* Animated text */
+.animated-text { 
+  margin-top:6px; 
+  font-size:14px; 
+  color:red; /* changed to red */
+  height:20px; 
+  overflow:hidden; 
+  white-space:nowrap; 
+  border-right:2px solid red; /* cursor matches text */
+  animation:blink 0.7s steps(1) infinite; 
 }
-
-.username {
-  margin-top: 10px;
-  font-size: 28px;
-  color: red;
-}
-
-.bio {
-  font-size: 14px;
-  margin-top: 4px;
-}
-
-.sub {
-  font-size: 12px;
-  opacity: 0.6;
-}
-
-/* Animated auto text */
-.animated-text {
-  margin-top: 6px;
-  font-size: 14px;
-  color: #ff0099;
-  height: 20px;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 2px solid #ff0099;
-  animation: blink 0.7s steps(1) infinite;
-}
-
-@keyframes blink {
-  50% { border-color: transparent; }
-}
+@keyframes blink { 50% { border-color:transparent; } }
 
 /* Profile views */
-.profile-views {
-  margin-top: 6px;
-  font-size: 12px;
-  opacity: 0.6;
-}
+.profile-views { margin-top:6px; font-size:12px; opacity:0.6; }
 
-/* Custom Spotify Player */
-.player {
-  position: fixed;
-  bottom: 25px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 420px;
-  padding: 14px;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(35px) saturate(180%);
-  box-shadow: 0 0 45px rgba(255,0,85,0.35);
-  display: flex;
-  align-items: center;
-}
+/* NEON GLOW SPOTIFY PLAYER */
+.player { position:fixed; bottom:25px; left:50%; transform:translateX(-50%); width:440px; padding:16px; border-radius:20px; background:rgba(0,0,0,0.5); backdrop-filter:blur(25px) saturate(200%); display:flex; align-items:center; box-shadow:0 0 20px #ff00ff,0 0 40px #00ffff,0 0 60px #ff00ff,0 0 80px #00ffff; border:1px solid rgba(255,255,255,0.2); animation:glow 2s ease-in-out infinite alternate; transition: transform 0.05s ease; }
+@keyframes glow { 0% { box-shadow:0 0 20px #ff00ff,0 0 40px #00ffff,0 0 60px #ff00ff,0 0 80px #00ffff; } 50% { box-shadow:0 0 25px #ff0099,0 0 50px #00ffea,0 0 70px #ff0099,0 0 90px #00ffea; } 100% { box-shadow:0 0 20px #ff00ff,0 0 40px #00ffff,0 0 60px #ff00ff,0 0 80px #00ffff; } }
 
-.cover {
-  width: 52px;
-  height: 52px;
-  border-radius: 10px;
-  margin-right: 14px;
-}
+.cover { width:56px; height:56px; border-radius:12px; margin-right:16px; box-shadow:0 0 20px #ff00ff,0 0 40px #00ffff; transition: transform 0.1s ease; }
 
-.info {
-  flex: 1;
-}
+.info h3 { font-size:14px; color:#fff; text-shadow:0 0 5px #ff00ff,0 0 10px #00ffff; }
+.info p { font-size:12px; opacity:0.8; color:#fff; text-shadow:0 0 5px #00ffff,0 0 10px #ff00ff; }
 
-.info h3 {
-  font-size: 14px;
-}
+/* RGB animated progress bar */
+.progress { width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:10px; margin-top:6px; overflow:hidden; box-shadow:0 0 10px #ff00ff,0 0 20px #00ffff inset; }
+.bar { height:100%; width:0%; border-radius:10px; background:linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet); background-size:200% 100%; animation:rainbow 2s linear infinite; box-shadow:0 0 20px #ff00ff,0 0 40px #00ffff; transition: box-shadow 0.1s ease, transform 0.1s ease; }
 
-.info p {
-  font-size: 12px;
-  opacity: 0.7;
-}
+@keyframes rainbow { 0% { background-position:0% 0%; } 100% { background-position:200% 0%; } }
 
-/* Progress bar */
-.progress {
-  width: 100%;
-  height: 6px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 10px;
-  margin-top: 6px;
-  overflow: hidden;
-}
-
-.bar {
-  height: 100%;
-  width: 0%;
-  background: #ff9f7a;
-}
-
-.time {
-  font-size: 11px;
-  opacity: 0.6;
-  margin-left: 10px;
-}
+.time { font-size:11px; opacity:0.8; margin-left:12px; color:#fff; text-shadow:0 0 5px #ff00ff,0 0 10px #00ffff; }
 </style>
 </head>
 
 <body>
 
 <div class="bg"></div>
-
-<div class="overlay" id="overlay">
-  <span>click to view</span>
-</div>
+<div class="overlay" id="overlay"><span>click to view</span></div>
 
 <div class="profile">
-  <img class="avatar" src="nigga.png">
+  <img class="avatar" src="nigga.png" alt="Avatar">
   <div class="username">xazny</div>
   <div class="bio">i can treat you right baee</div>
   <div class="sub">.gg/xtazy</div>
-
-  <!-- Animated Auto Text -->
   <div class="animated-text" id="animatedText"></div>
-
-  <!-- Profile views -->
   <div class="profile-views" id="profileViews">Profile Views: 0</div>
-
-  <!-- Discord link -->
-  <a href="https://discord.com/users/YOUR_USER_ID" target="_blank" id="discordLink">Discord</a>
-</div>
 </div>
 
-<!-- CUSTOM PLAYER -->
-<div class="player">
-  <img class="cover" src="IMG_5413.jpeg">
+<!-- NEON SPOTIFY PLAYER -->
+<div class="player" id="player">
+  <img class="cover" src="IMG_5413.jpeg" alt="Album Cover" id="cover">
   <div class="info">
     <h3>Di Na Saluhin</h3>
     <p>Hev Abi</p>
-    <div class="progress">
-      <div class="bar" id="bar"></div>
-    </div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
   </div>
   <div class="time" id="time">0:00</div>
 </div>
@@ -209,70 +87,90 @@ body {
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  // Overlay click
   const overlay = document.getElementById("overlay");
   const audio = document.getElementById("audio");
   const bar = document.getElementById("bar");
   const time = document.getElementById("time");
+  const cover = document.getElementById("cover");
+  const player = document.getElementById("player");
 
-  overlay.onclick = () => {
+  overlay.onclick = async () => {
     overlay.style.display = "none";
-    audio.play();
+    await audio.play();
+
+    // Web Audio API for beat detection
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioCtx.createMediaElementSource(audio);
+    const analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    function animateBeat() {
+      analyser.getByteFrequencyData(dataArray);
+      let avg = dataArray.reduce((a,b)=>a+b,0)/dataArray.length;
+
+      // Progress bar reacts to beat
+      bar.style.width = (audio.currentTime/audio.duration*100) + "%";
+      let glow = Math.min(50 + avg/2, 120);
+      bar.style.boxShadow = `0 0 ${glow}px #ff00ff, 0 0 ${glow*2}px #00ffff`;
+      bar.style.transform = `scaleY(${1 + avg/500})`;
+
+      // Album cover pulse
+      let scale = 1 + avg/500;
+      cover.style.transform = `scale(${scale})`;
+
+      // Player shake
+      let shakeX = (Math.random()-0.5)*avg/150;
+      let shakeY = (Math.random()-0.5)*avg/150;
+      player.style.transform = `translateX(calc(-50% + ${shakeX}px)) translateY(${shakeY}px)`;
+
+      requestAnimationFrame(animateBeat);
+    }
+    animateBeat();
   };
 
-  // Audio progress
+  // Update time display
   audio.ontimeupdate = () => {
-    const percent = (audio.currentTime / audio.duration) * 100 || 0;
-    bar.style.width = percent + "%";
-
-    const m = Math.floor(audio.currentTime / 60);
-    const s = Math.floor(audio.currentTime % 60).toString().padStart(2, "0");
+    const m = Math.floor(audio.currentTime/60);
+    const s = Math.floor(audio.currentTime%60).toString().padStart(2,"0");
     time.textContent = `${m}:${s}`;
   };
 
   // Auto typing text
-  const texts = ["wag", "kang", "kupal", "bobo!"];
+  const texts = ["wag","kang","kupal","bobo!"];
   const animatedText = document.getElementById("animatedText");
-  let textIndex = 0, charIndex = 0, typing = true;
-
-  function typeText() {
+  let textIndex=0, charIndex=0, typing=true;
+  function typeText(){
     if(!texts[textIndex]) return;
-
-    if(typing) {
-      if(charIndex < texts[textIndex].length){
+    if(typing){
+      if(charIndex<texts[textIndex].length){
         animatedText.textContent += texts[textIndex].charAt(charIndex);
         charIndex++;
-        setTimeout(typeText, 120);
-      } else {
-        typing = false;
-        setTimeout(typeText, 1000);
-      }
+        setTimeout(typeText,120);
+      } else { typing=false; setTimeout(typeText,1000); }
     } else {
-      if(charIndex > 0){
-        animatedText.textContent = texts[textIndex].substring(0, charIndex-1);
+      if(charIndex>0){
+        animatedText.textContent = texts[textIndex].substring(0,charIndex-1);
         charIndex--;
-        setTimeout(typeText, 60);
-      } else {
-        typing = true;
-        textIndex = (textIndex + 1) % texts.length;
-        setTimeout(typeText, 200);
-      }
+        setTimeout(typeText,60);
+      } else { typing=true; textIndex=(textIndex+1)%texts.length; setTimeout(typeText,200); }
     }
   }
-
   typeText();
 
-  // Profile views counter (per device)
+  // Profile views
   let views = localStorage.getItem('profileViews') || 0;
-  views = parseInt(views) + 1;
-  localStorage.setItem('profileViews', views);
+  views = parseInt(views)+1;
+  localStorage.setItem('profileViews',views);
   document.getElementById('profileViews').textContent = `X: ${views}`;
-  document.getElementById('discordProfileViews').textContent = views;
 });
 </script>
-
 </body>
 </html>
+
 
 
 
