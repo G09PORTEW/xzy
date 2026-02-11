@@ -9,7 +9,7 @@
 body { height:100vh; overflow:hidden; background:#000; color:white; }
 
 /* Background */
-.bg { position:fixed; inset:0; background:url("https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXlhdXU1b2dhdTRsejQxNjRkYXg4Mzcxc2JjdDIyNm8wczFtaTduZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/PtACXVQCcmm3u/giphy.gif") center/cover no-repeat; filter:blur(12px) brightness(0.5); z-index:-2; }
+.bg { position:fixed; inset:0; background:url("https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZWU2eWEwY2pjNmoyMXQwbWd0djV4OHd3bDYweGpjbWI5aWFrcnBvdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VLWRAim5Qk0FNtNCuV/giphy.gif") center/cover no-repeat; filter:blur(12px) brightness(0.5); z-index:-2; }
 
 /* Overlay click */
 .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(20px); display:flex; justify-content:center; align-items:center; z-index:10; cursor:pointer; }
@@ -86,7 +86,8 @@ body { height:100vh; overflow:hidden; background:#000; color:white; }
   <div class="time" id="time">0:00</div>
 </div>
 
-<audio id="audio" loop></audio>
+<!-- Removed loop attribute -->
+<audio id="audio"></audio>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -227,6 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   audio.onended = () => {
+    // Play next song automatically
     currentSong = (currentSong+1)%songs.length;
     playSong(currentSong);
   };
@@ -261,3 +263,4 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
