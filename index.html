@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profile Music Embed</title>
+<title>Drift.rip Style Profile</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
-body { height:100vh; color:white; overflow:hidden; background:#000; }
+body { height:100vh; overflow:hidden; background:#000; color:white; }
 
 /* Background */
 .bg { position:fixed; inset:0; background:url("https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXlhdXU1b2dhdTRsejQxNjRkYXg4Mzcxc2JjdDIyNm8wczFtaTduZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/PtACXVQCcmm3u/giphy.gif") center/cover no-repeat; filter:blur(12px) brightness(0.5); z-index:-2; }
@@ -16,8 +16,9 @@ body { height:100vh; color:white; overflow:hidden; background:#000; }
 .overlay span { padding:20px 40px; border-radius:18px; background:rgba(255,255,255,0.08); backdrop-filter:blur(40px); box-shadow:0 0 40px rgba(255,0,85,0.5); font-size:22px; }
 
 /* Profile */
-.profile { position:absolute; top:20%; left:50%; transform:translate(-50%,-20%); text-align:center; color:white; }
-.avatar { width:100px; height:100px; border-radius:50%; border:2px solid red; }
+.profile { position:absolute; top:20%; left:50%; transform:translate(-50%,-20%); text-align:center; color:white; z-index:5; }
+.profile-canvas { position:absolute; top:0; left:0; pointer-events:none; z-index:-1; }
+.avatar { width:100px; height:100px; border-radius:50%; border:2px solid red; transition: transform 0.1s ease, box-shadow 0.1s ease; }
 .username { margin-top:10px; font-size:28px; color:red; text-shadow:0 0 5px red,0 0 10px red; }
 .bio { font-size:14px; color:white; text-shadow:0 0 5px white,0 0 10px white; margin-top:4px; }
 .sub { font-size:12px; color:black; margin-top:2px; }
@@ -64,7 +65,8 @@ body { height:100vh; color:white; overflow:hidden; background:#000; }
 <div class="overlay" id="overlay"><span>click to view</span></div>
 
 <div class="profile">
-  <img class="avatar" src="nigga.png" alt="Avatar">
+  <canvas id="profileCanvas" class="profile-canvas"></canvas>
+  <img class="avatar" id="avatar" src="nigga.png" alt="Avatar">
   <div class="username">xazny</div>
   <div class="bio">i can treat you right baee</div>
   <div class="sub">.gg/xtazy</div>
@@ -95,19 +97,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const cover = document.getElementById("cover");
   const player = document.getElementById("player");
   const animatedText = document.getElementById("animatedText");
+  const avatar = document.getElementById("avatar");
+  const profileCanvas = document.getElementById("profileCanvas");
+  const profileCtx = profileCanvas.getContext("2d");
   const waveCanvas = document.getElementById("waveCanvas");
-  const ctx = waveCanvas.getContext("2d");
+  const waveCtx = waveCanvas.getContext("2d");
 
-  // Songs playlist
+  // Playlist
   const songs = [
-    { src:"fwm.mp3", title:"FWM (Unreleased)", artist:"PARTYNEXTDOOR", cover:"IMG_5418.jpeg" },
-    { src:"loosemymind.mp3", title:"L o o s e m y m i n d", artist:"PARTYNEXTDOOR", cover:"IMG_5419.jpeg" }
+    { src:"fwm.mp3", title:"FWM (Unreleased)", artist:"PARTYNEXTDOOR", cover:"IMG_5419.jpeg" },
+    { src:"loosemymind.mp3", title:"L o o s e m y m i n d", artist:"PARTYNEXTDOOR", cover:"IMG_5418.jpeg" }
   ];
   let currentSong = 0;
 
-  function resizeCanvas() {
+  function resizeCanvas(){
     waveCanvas.width = player.clientWidth;
     waveCanvas.height = player.clientHeight;
+    profileCanvas.width = window.innerWidth;
+    profileCanvas.height = window.innerHeight;
   }
   window.addEventListener('resize', resizeCanvas);
   resizeCanvas();
@@ -116,6 +123,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const analyser = audioCtx.createAnalyser();
   analyser.fftSize = 256;
   const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+  // Particles around avatar
+  const particles = [];
+  const particleCount = 60;
+  for(let i=0;i<particleCount;i++){
+    particles.push({
+      x: window.innerWidth/2,
+      y: window.innerHeight*0.2,
+      angle: Math.random()*Math.PI*2,
+      radius: Math.random()*3+2,
+      distance: Math.random()*80+50
+    });
+  }
 
   function playSong(index){
     const song = songs[index];
@@ -128,8 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   overlay.onclick = async () => {
     overlay.style.display = "none";
-    if(audioCtx.state === 'suspended') await audioCtx.resume();
-
+    if(audioCtx.state==='suspended') await audioCtx.resume();
     playSong(currentSong);
 
     const source = audioCtx.createMediaElementSource(audio);
@@ -140,34 +159,60 @@ document.addEventListener("DOMContentLoaded", () => {
       analyser.getByteFrequencyData(dataArray);
       let avg = dataArray.reduce((a,b)=>a+b,0)/dataArray.length;
 
-      // Progress bar reacts
-      bar.style.width = (audio.currentTime/audio.duration*100) + "%";
+      // Avatar glow & pulse
+      avatar.style.transform = `scale(${1 + avg/400})`;
+      avatar.style.boxShadow = `0 0 ${avg/2}px red,0 0 ${avg}px darkred`;
+
+      // Progress bar
+      if(audio.duration) bar.style.width = (audio.currentTime/audio.duration*100) + "%";
       bar.style.transform = `scaleY(${1 + avg/500})`;
       bar.style.boxShadow = `0 0 ${10 + avg/2}px red`;
 
-      // Cover pulse
-      cover.style.transform = `scale(${1 + avg/500})`;
+      // Animated text
+      animatedText.style.textShadow = `0 0 ${10 + avg/2}px red,0 0 ${10 + avg/2}px darkred`;
 
-      // Player shake
-      let shakeX = (Math.random()-0.5)*avg/150;
-      let shakeY = (Math.random()-0.5)*avg/150;
-      player.style.transform = `translateX(calc(-50% + ${shakeX}px)) translateY(${shakeY}px)`;
-
-      // Animated text pulse
-      animatedText.style.textShadow = `0 0 ${10 + avg/2}px red, 0 0 ${10 + avg/2}px darkred`;
-
-      // Wave animation (beat-reactive)
-      ctx.clearRect(0,0,waveCanvas.width,waveCanvas.height);
+      // Wave in player (smoother)
+      waveCtx.clearRect(0,0,waveCanvas.width,waveCanvas.height);
       const colors = ["#ff4d4d","#ff0000","#b30000"];
       for(let i=0;i<3;i++){
-        ctx.beginPath();
-        ctx.strokeStyle = colors[i];
-        ctx.lineWidth = 2;
-        for(let x=0;x<waveCanvas.width;x+=2){
-          let y = waveCanvas.height/2 + Math.sin(x*0.05 + i)*10*(avg/50);
-          ctx.lineTo(x,y);
+        waveCtx.beginPath();
+        waveCtx.strokeStyle = colors[i];
+        waveCtx.lineWidth = 2;
+        for(let x=0;x<waveCanvas.width;x+=1){
+          let y = waveCanvas.height/2 + Math.sin(x*0.03+i + Date.now()*0.003)*15*(avg/50);
+          waveCtx.lineTo(x,y);
         }
-        ctx.stroke();
+        waveCtx.stroke();
+      }
+
+      // Profile particles and spectrum bars
+      profileCtx.clearRect(0,0,profileCanvas.width,profileCanvas.height);
+      const cx = window.innerWidth/2;
+      const cy = window.innerHeight*0.2;
+      const radius = 80;
+      const bars = dataArray.length/2;
+      for(let i=0;i<bars;i+=2){
+        let angle = (i/bars)*Math.PI*2;
+        let barHeight = dataArray[i]/2;
+        let x1 = cx + Math.cos(angle)*radius;
+        let y1 = cy + Math.sin(angle)*radius;
+        let x2 = cx + Math.cos(angle)*(radius+barHeight);
+        let y2 = cy + Math.sin(angle)*(radius+barHeight);
+        profileCtx.strokeStyle = `rgba(255,0,0,0.7)`;
+        profileCtx.lineWidth = 2;
+        profileCtx.beginPath();
+        profileCtx.moveTo(x1,y1);
+        profileCtx.lineTo(x2,y2);
+        profileCtx.stroke();
+      }
+      for(let p of particles){
+        p.angle += 0.02 + avg/1000;
+        p.x = cx + Math.cos(p.angle)*p.distance;
+        p.y = cy + Math.sin(p.angle)*p.distance;
+        profileCtx.beginPath();
+        profileCtx.arc(p.x,p.y,p.radius+avg/100,0,Math.PI*2);
+        profileCtx.fillStyle = `rgba(255,${Math.floor(50+avg)},50,0.7)`;
+        profileCtx.fill();
       }
 
       requestAnimationFrame(animateBeat);
@@ -182,7 +227,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   audio.onended = () => {
-    // Play next song
     currentSong = (currentSong+1)%songs.length;
     playSong(currentSong);
   };
@@ -208,6 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   typeText();
 
+  // Profile views
   let views = localStorage.getItem('profileViews') || 0;
   views = parseInt(views)+1;
   localStorage.setItem('profileViews',views);
@@ -216,5 +261,3 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
-
-
