@@ -17,6 +17,7 @@ body {
   height: 100vh;
   color: white;
   overflow: hidden;
+  background: #000;
 }
 
 /* Background */
@@ -53,40 +54,42 @@ body {
 /* Profile */
 .profile {
   position: absolute;
-  top: 38%;
+  top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+  color: white;
 }
 
 .avatar {
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   border: 2px solid red;
 }
 
 .username {
-  margin-top: 12px;
+  margin-top: 10px;
   font-size: 28px;
   color: red;
 }
 
-.bio { 
-  font-size: 14px; 
-  margin-top: 6px; 
-  opacity: 1;
-  transition: opacity 0.5s ease;
+.bio {
+  font-size: 14px;
+  margin-top: 4px;
 }
 
-.sub { font-size: 12px; opacity: 0.6; }
+.sub {
+  font-size: 12px;
+  opacity: 0.6;
+}
 
 /* Animated auto text */
 .animated-text {
-  margin-top: 8px;
+  margin-top: 6px;
   font-size: 14px;
   color: #ff0099;
-  height: 20px; /* prevent layout shift */
+  height: 20px;
   overflow: hidden;
   white-space: nowrap;
   border-right: 2px solid #ff0099;
@@ -96,6 +99,27 @@ body {
 @keyframes blink {
   50% { border-color: transparent; }
 }
+
+/* Profile views */
+.profile-views {
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* Discord link */
+#discordLink {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 10px;
+  background: #7289da;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 12px;
+  transition: background 0.3s;
+}
+#discordLink:hover { background: #5b6eae; }
 
 /* Custom Spotify Player */
 .player {
@@ -170,9 +194,15 @@ body {
   <div class="username">xazny</div>
   <div class="bio">i can treat you right baee</div>
   <div class="sub">.gg/xtazy</div>
-  
+
   <!-- Animated Auto Text -->
   <div class="animated-text" id="animatedText"></div>
+
+  <!-- Profile views -->
+  <div class="profile-views" id="profileViews">Profile Views: 0</div>
+
+  <!-- Discord link -->
+  <a href="https://discord.com/users/YOUR_USER_ID" target="_blank" id="discordLink">Discord</a>
 </div>
 
 <!-- CUSTOM PLAYER -->
@@ -188,60 +218,73 @@ body {
   <div class="time" id="time">0:00</div>
 </div>
 
-<audio id="audio" src="di na saluhin.mp3"></audio>
+<audio id="audio" src="di na saluhin.mp3" loop></audio> <!-- loop added -->
 
 <script>
-/* OVERLAY CLICK */
-const overlay = document.getElementById("overlay");
-const audio = document.getElementById("audio");
-const bar = document.getElementById("bar");
-const time = document.getElementById("time");
+document.addEventListener("DOMContentLoaded", () => {
+  // Overlay click
+  const overlay = document.getElementById("overlay");
+  const audio = document.getElementById("audio");
+  const bar = document.getElementById("bar");
+  const time = document.getElementById("time");
 
-overlay.onclick = () => {
-  overlay.style.display = "none";
-  audio.play();
-};
+  overlay.onclick = () => {
+    overlay.style.display = "none";
+    audio.play();
+  };
 
-/* AUDIO PLAYER PROGRESS */
-audio.ontimeupdate = () => {
-  const percent = (audio.currentTime / audio.duration) * 100;
-  bar.style.width = percent + "%";
+  // Audio progress
+  audio.ontimeupdate = () => {
+    const percent = (audio.currentTime / audio.duration) * 100 || 0;
+    bar.style.width = percent + "%";
 
-  const m = Math.floor(audio.currentTime / 60);
-  const s = Math.floor(audio.currentTime % 60).toString().padStart(2, "0");
-  time.textContent = `${m}:${s}`;
-};
+    const m = Math.floor(audio.currentTime / 60);
+    const s = Math.floor(audio.currentTime % 60).toString().padStart(2, "0");
+    time.textContent = `${m}:${s}`;
+  };
 
-/* AUTO-TYPING AND AUTO-DELETING TEXT */
-const texts = ["wag kang patanga-tanga!"];
-const animatedText = document.getElementById("animatedText");
+  // Auto typing text
+  const texts = ["gaming addict", "music lover", "code wizard", "vibes only"];
+  const animatedText = document.getElementById("animatedText");
+  let textIndex = 0, charIndex = 0, typing = true;
 
-let textIndex = 0;
-let charIndex = 0;
-let typing = true;
+  function typeText() {
+    if(!texts[textIndex]) return;
 
-function typeText() {
-  if (typing) {
-    animatedText.textContent += texts[textIndex][charIndex];
-    charIndex++;
-    if (charIndex === texts[textIndex].length) {
-      typing = false;
-      setTimeout(typeText, 1000); // pause before deleting
-      return;
-    }
-  } else {
-    animatedText.textContent = animatedText.textContent.slice(0, -1);
-    if (animatedText.textContent.length === 0) {
-      typing = true;
-      textIndex = (textIndex + 1) % texts.length;
+    if(typing) {
+      if(charIndex < texts[textIndex].length){
+        animatedText.textContent += texts[textIndex].charAt(charIndex);
+        charIndex++;
+        setTimeout(typeText, 120);
+      } else {
+        typing = false;
+        setTimeout(typeText, 1000);
+      }
+    } else {
+      if(charIndex > 0){
+        animatedText.textContent = texts[textIndex].substring(0, charIndex-1);
+        charIndex--;
+        setTimeout(typeText, 60);
+      } else {
+        typing = true;
+        textIndex = (textIndex + 1) % texts.length;
+        setTimeout(typeText, 200);
+      }
     }
   }
-  setTimeout(typeText, typing ? 120 : 60); // type speed / delete speed
-}
 
-typeText();
+  typeText();
+
+  // Profile views counter (per device)
+  let views = localStorage.getItem('profileViews') || 0;
+  views = parseInt(views) + 1;
+  localStorage.setItem('profileViews', views);
+  const profileViewsEl = document.getElementById('profileViews');
+  if(profileViewsEl) profileViewsEl.textContent = `Profile Views: ${views}`;
+});
 </script>
 
 </body>
 </html>
+
 
