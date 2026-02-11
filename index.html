@@ -25,8 +25,41 @@ body {
   inset: 0;
   background: url("https://media1.tenor.com/m/UaU5X_41E44AAAAC/vex.gif")
     center/cover no-repeat;
-  filter: blur(6px) brightness(0.6);
-  z-index: -1;
+  filter: blur(10px) brightness(0.55);
+  z-index: -2;
+}
+
+/* Dark overlay for depth */
+.bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+}
+
+/* Click to View Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(18px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.overlay span {
+  font-size: 22px;
+  letter-spacing: 1px;
+  padding: 18px 36px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(30px);
+  box-shadow: 
+    0 0 40px rgba(255,0,85,0.4),
+    inset 0 0 20px rgba(255,255,255,0.15);
 }
 
 /* Profile */
@@ -62,38 +95,46 @@ body {
   opacity: 0.6;
 }
 
-/* Icons */
+/* Icons glow */
 .icons {
-  margin-top: 12px;
+  margin-top: 14px;
 }
 
 .icons a img {
-  width: 22px;
-  margin: 0 6px;
-  opacity: 0.8;
-  transition: 0.2s;
+  width: 24px;
+  margin: 0 8px;
+  filter:
+    drop-shadow(0 0 6px rgba(255,255,255,0.6))
+    drop-shadow(0 0 14px rgba(255,0,85,0.5));
+  transition: 0.3s;
 }
 
 .icons a img:hover {
-  opacity: 1;
-  transform: scale(1.1);
+  filter:
+    drop-shadow(0 0 8px #fff)
+    drop-shadow(0 0 20px #ff0055)
+    drop-shadow(0 0 35px #ff0055);
+  transform: scale(1.2);
 }
 
-/* Spotify Player */
+/* Spotify Glass Player */
 .spotify {
   position: fixed;
   bottom: 25px;
   left: 50%;
   transform: translateX(-50%);
-  width: 320px;
-  background: rgba(0,0,0,0.6);
-  padding: 10px;
-  border-radius: 14px;
-  backdrop-filter: blur(10px);
+  width: 380px;
+  padding: 14px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(35px) saturate(180%);
+  box-shadow:
+    0 0 45px rgba(255,0,85,0.35),
+    inset 0 0 25px rgba(255,255,255,0.15);
 }
 
 .spotify iframe {
-  border-radius: 12px;
+  border-radius: 14px;
 }
 </style>
 </head>
@@ -102,12 +143,17 @@ body {
 
 <div class="bg"></div>
 
+<!-- CLICK TO VIEW -->
+<div class="overlay" id="overlay">
+  <span>click to view</span>
+</div>
+
 <div class="profile">
   <img class="avatar" src="nigga.png">
 
   <div class="username">xazny</div>
   <div class="bio">i can treat you right baee</div>
-  <div class="sub">.gg/xtazy </div>
+  <div class="sub">.gg/xtazy</div>
 
   <div class="icons">
     <a href="https://discord.gg/" target="_blank">
@@ -121,13 +167,24 @@ body {
 
 <div class="spotify">
   <iframe
-    src="https://open.spotify.com/embed/track/0O3TAouZE4vL9dM5SyxgvH?utm_source=generator"
+    id="spotifyPlayer"
+    src="https://open.spotify.com/embed/track/0O3TAouZE4vL9dM5SyxgvH"
     width="100%"
     height="80"
-    frameBorder="0"
-    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+    frameborder="0"
+    allow="autoplay; encrypted-media">
   </iframe>
 </div>
+
+<script>
+const overlay = document.getElementById("overlay");
+const player = document.getElementById("spotifyPlayer");
+
+overlay.addEventListener("click", () => {
+  overlay.style.display = "none";
+  player.src += "?autoplay=1";
+});
+</script>
 
 </body>
 </html>
