@@ -107,20 +107,6 @@ body {
   opacity: 0.6;
 }
 
-/* Discord link */
-#discordLink {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 4px 10px;
-  background: #7289da;
-  color: white;
-  text-decoration: none;
-  border-radius: 6px;
-  font-size: 12px;
-  transition: background 0.3s;
-}
-#discordLink:hover { background: #5b6eae; }
-
 /* Custom Spotify Player */
 .player {
   position: fixed;
@@ -178,72 +164,6 @@ body {
   opacity: 0.6;
   margin-left: 10px;
 }
-
-/* Discord-style Embed */
-.discord-embed {
-  width: 350px;
-  background: #2f3136;
-  border-left: 4px solid #ff0000;
-  border-radius: 8px;
-  padding: 12px;
-  color: #dcddde;
-  font-family: "Arial", sans-serif;
-  margin: 20px auto;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-.discord-header {
-  display: flex;
-  align-items: center;
-}
-
-.discord-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-  border: 2px solid #ff0000;
-}
-
-.discord-user {
-  display: flex;
-  flex-direction: column;
-}
-
-.discord-username {
-  font-weight: bold;
-  color: #fff;
-}
-
-.discord-tag {
-  font-size: 12px;
-  color: #72767d;
-}
-
-.discord-content {
-  margin-top: 10px;
-}
-
-.discord-bio {
-  font-size: 14px;
-  margin-bottom: 4px;
-}
-
-.discord-views {
-  font-size: 12px;
-  color: #b9bbbe;
-  margin-bottom: 4px;
-}
-
-.discord-link {
-  font-size: 12px;
-  color: #00aff4;
-  text-decoration: none;
-}
-
-.discord-link:hover {
-  text-decoration: underline;
-}
 </style>
 </head>
 
@@ -270,21 +190,6 @@ body {
   <!-- Discord link -->
   <a href="https://discord.com/users/YOUR_USER_ID" target="_blank" id="discordLink">Discord</a>
 </div>
-
-<!-- Discord-style Embed -->
-<div class="discord-embed">
-  <div class="discord-header">
-    <img class="discord-avatar" src="IMG_5415.jpeg" alt="avatar">
-    <div class="discord-user">
-      <span class="discord-username">xazny</span>
-      <span class="discord-tag">#1234</span>
-    </div>
-  </div>
-  <div class="discord-content">
-    <p class="discord-bio">i can treat you right baee</p>
-    <p class="discord-views">Profile Views: <span id="discordProfileViews">0</span></p>
-    <a href="https://discord.com/users/YOUR_USER_ID" target="_blank" class="discord-link">Discord Profile</a>
-  </div>
 </div>
 
 <!-- CUSTOM PLAYER -->
@@ -368,6 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
 
 
