@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profile</title>
+<title>Profile with 2 Songs</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
 body { height:100vh; color:white; overflow:hidden; background:#000; }
@@ -17,8 +17,8 @@ body { height:100vh; color:white; overflow:hidden; background:#000; }
 
 /* Profile */
 .profile { position:absolute; top:20%; left:50%; transform:translate(-50%,-20%); text-align:center; }
-.avatar { width:100px; height:100px; border-radius:50%; border:2px solid #fff; }
-.username { margin-top:10px; font-size:28px; color:red; text-shadow:0 0 10px red,0 0 20px red; }
+.avatar { width:100px; height:100px; border-radius:50%; border:2px solid red; }
+.username { margin-top:10px; font-size:28px; color:red; }
 .bio { font-size:14px; color:white; margin-top:4px; }
 .sub { font-size:12px; color:black; margin-top:2px; }
 
@@ -26,13 +26,12 @@ body { height:100vh; color:white; overflow:hidden; background:#000; }
 .animated-text { 
   margin-top:6px; 
   font-size:14px; 
-  color:red; 
+  color:red;
   height:20px; 
   overflow:hidden; 
   white-space:nowrap; 
   border-right:2px solid red; 
   animation:blink 0.7s steps(1) infinite;
-  text-shadow:0 0 5px red,0 0 10px red;
 }
 @keyframes blink { 50% { border-color:transparent; } }
 
@@ -42,18 +41,19 @@ body { height:100vh; color:white; overflow:hidden; background:#000; }
 /* SPOTIFY PLAYER */
 .player { 
   position:fixed; bottom:25px; left:50%; transform:translateX(-50%); width:440px; padding:16px; border-radius:20px; 
-  background:rgba(0,0,0,0.2); backdrop-filter:blur(30px) saturate(200%); display:flex; align-items:center; 
-  box-shadow:0 0 20px red,0 0 40px red inset; border:1px solid rgba(255,0,0,0.5); 
+  background:rgba(0,0,0,0.15); backdrop-filter:blur(30px) saturate(200%); display:flex; align-items:center; 
+  border:1px solid rgba(255,255,255,0.2); 
   transition: transform 0.05s ease; overflow:hidden;
 }
 .cover { width:56px; height:56px; border-radius:12px; transition: transform 0.1s ease; }
 
 /* Info */
 .info { flex:1; position:relative; }
-.info h3, .info p { color:red; text-shadow:0 0 10px red,0 0 20px red; }
-.progress { width:100%; height:6px; background:rgba(255,0,0,0.2); border-radius:10px; margin-top:6px; overflow:hidden; }
-.bar { height:100%; width:0%; border-radius:10px; background:red; box-shadow:0 0 20px red; transition: transform 0.1s ease; }
-.time { font-size:11px; margin-left:12px; color:red; text-shadow:0 0 5px red,0 0 10px red; }
+.info h3 { font-size:14px; color:red; }
+.info p { font-size:12px; color:red; margin:2px 0; }
+.progress { width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:10px; margin-top:6px; overflow:hidden; }
+.bar { height:100%; width:0%; border-radius:10px; background:red; transition: box-shadow 0.1s ease, transform 0.1s ease; }
+.time { font-size:11px; margin-left:12px; color:red; }
 
 /* Wave canvas inside player */
 #waveCanvas { position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:-1; }
@@ -73,19 +73,19 @@ body { height:100vh; color:white; overflow:hidden; background:#000; }
   <div class="profile-views" id="profileViews">Profile Views: 0</div>
 </div>
 
-<!-- SPOTIFY PLAYER -->
+<!-- PLAYER 1 & 2 -->
 <div class="player" id="player">
   <canvas id="waveCanvas"></canvas>
   <img class="cover" src="IMG_5413.jpeg" alt="Album Cover" id="cover">
   <div class="info">
-    <h3>Di Na Saluhin</h3>
-    <p>Hev Abi</p>
+    <h3 id="songTitle">Di Na Saluhin</h3>
+    <p id="songArtist">Hev Abi</p>
     <div class="progress"><div class="bar" id="bar"></div></div>
   </div>
   <div class="time" id="time">0:00</div>
 </div>
 
-<audio id="audio" src="di na saluhin.mp3" loop></audio>
+<audio id="audio" src="di na saluhin.mp3"></audio>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -99,6 +99,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const waveCanvas = document.getElementById("waveCanvas");
   const ctx = waveCanvas.getContext("2d");
 
+  const songs = [
+    {title:"FWM(Unreleased)", artist:"PARTYNEXTDOOR", src:"fwm.mp3", cover:"IMG_5419.jpeg"},
+    {title:"L o o s e m y m i n d", artist:"PARTYNEXTDOOR", src:"loosemymind.mp3", cover:"IMG_5418.jpeg"}
+  ];
+  let currentSong = 0;
+
   function resizeCanvas() {
     waveCanvas.width = player.clientWidth;
     waveCanvas.height = player.clientHeight;
@@ -108,54 +114,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
   overlay.onclick = async () => {
     overlay.style.display = "none";
-    await audio.play();
-
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const source = audioCtx.createMediaElementSource(audio);
-    const analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 256;
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-    function animateBeat() {
-      analyser.getByteFrequencyData(dataArray);
-      let avg = dataArray.reduce((a,b)=>a+b,0)/dataArray.length;
-
-      // Progress bar reacts to beat
-      bar.style.width = (audio.currentTime/audio.duration*100) + "%";
-      bar.style.transform = `scaleY(${1 + avg/500})`;
-
-      // Album cover pulse
-      cover.style.transform = `scale(${1 + avg/500})`;
-
-      // Player shake
-      let shakeX = (Math.random()-0.5)*avg/150;
-      let shakeY = (Math.random()-0.5)*avg/150;
-      player.style.transform = `translateX(calc(-50% + ${shakeX}px)) translateY(${shakeY}px)`;
-
-      // Animated text glow pulse
-      animatedText.style.textShadow = `0 0 ${10 + avg/3}px red, 0 0 ${20 + avg/2}px red`;
-
-      // Wave animation (only reacts to beat)
-      ctx.clearRect(0,0,waveCanvas.width,waveCanvas.height);
-      let waveCount = 3;
-      for(let i=0;i<waveCount;i++){
-        ctx.beginPath();
-        ctx.strokeStyle = `rgba(255,0,0,0.5)`;
-        ctx.lineWidth = 2;
-        let centerY = waveCanvas.height/2;
-        for(let x=0;x<waveCanvas.width;x+=4){
-          let y = centerY + Math.sin(x*0.04 + i)*10*(avg/50);
-          ctx.lineTo(x,y);
-        }
-        ctx.stroke();
-      }
-
-      requestAnimationFrame(animateBeat);
-    }
-    animateBeat();
+    playSong(currentSong);
   };
+
+  function playSong(index){
+    audio.src = songs[index].src;
+    cover.src = songs[index].cover;
+    document.getElementById("songTitle").textContent = songs[index].title;
+    document.getElementById("songArtist").textContent = songs[index].artist;
+    audio.play();
+  }
+
+  audio.addEventListener('ended', () => {
+    currentSong = (currentSong + 1) % songs.length;
+    playSong(currentSong);
+  });
+
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const source = audioCtx.createMediaElementSource(audio);
+  const analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 256;
+  source.connect(analyser);
+  analyser.connect(audioCtx.destination);
+  const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+  function animateBeat() {
+    analyser.getByteFrequencyData(dataArray);
+    let avg = dataArray.reduce((a,b)=>a+b,0)/dataArray.length;
+
+    // Progress bar reacts to beat
+    bar.style.width = (audio.currentTime/audio.duration*100 || 0) + "%";
+    bar.style.transform = `scaleY(${1 + avg/500})`;
+
+    // Album cover pulse
+    cover.style.transform = `scale(${1 + avg/500})`;
+
+    // Player shake
+    let shakeX = (Math.random()-0.5)*avg/150;
+    let shakeY = (Math.random()-0.5)*avg/150;
+    player.style.transform = `translateX(calc(-50% + ${shakeX}px)) translateY(${shakeY}px)`;
+
+    // Animated text pulse
+    animatedText.style.filter = `drop-shadow(0 0 ${10 + avg/3}px red) drop-shadow(0 0 ${10 + avg/3}px red)`;
+
+    // Wave animation (reacting to beat)
+    ctx.clearRect(0,0,waveCanvas.width,waveCanvas.height);
+    ctx.beginPath();
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 2;
+    for(let x=0;x<waveCanvas.width;x+=2){
+      let y = waveCanvas.height/2 + Math.sin(x*0.04)*10*(avg/50);
+      ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    requestAnimationFrame(animateBeat);
+  }
+  animateBeat();
 
   audio.ontimeupdate = () => {
     const m = Math.floor(audio.currentTime/60);
@@ -184,11 +199,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   typeText();
 
-  // Profile views
   let views = localStorage.getItem('profileViews') || 0;
   views = parseInt(views)+1;
   localStorage.setItem('profileViews',views);
-  document.getElementById('profileViews').textContent = `mga bobong pumindot: ${views}`;
+  document.getElementById('profileViews').textContent = `X: ${views}`;
 });
 </script>
 </body>
