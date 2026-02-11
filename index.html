@@ -20,13 +20,20 @@ body{
   color:white;
 }
 
-/* ===== BACKGROUND (45% blur) ===== */
+/* ===== BACKGROUND (45% BLUR) ===== */
 .bg{
   position:fixed;
   inset:0;
   background:url("https://media1.giphy.com/media/VLWRAim5Qk0FNtNCuV/giphy.gif") center/cover no-repeat;
-  filter:blur(6px) brightness(0.45);
-  z-index:-2;
+  filter:blur(6px) brightness(0.45) contrast(1.2);
+  z-index:-3;
+}
+
+.bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle, transparent 40%, rgba(0,0,0,0.85));
 }
 
 /* ===== OVERLAY ===== */
@@ -54,89 +61,161 @@ body{
 /* ===== PROFILE CARD ===== */
 .profile{
   position:absolute;
-  top:50%;
+  top:22%;
   left:50%;
-  transform:translate(-50%,-50%);
+  transform:translate(-50%,-20%);
   text-align:center;
-  padding:40px;
-  width:350px;
+  padding:35px 45px;
   border-radius:25px;
   background:rgba(255,255,255,0.04);
-  backdrop-filter:blur(30px);
+  backdrop-filter:blur(30px) saturate(160%);
   border:1px solid rgba(255,0,0,0.15);
   box-shadow:
     0 25px 60px rgba(0,0,0,0.8),
     0 0 50px rgba(255,0,0,0.2);
+  transition:0.3s ease;
+}
+
+.profile:hover{
+  transform:translate(-50%,-22%) scale(1.03);
 }
 
 .avatar{
   width:110px;
   height:110px;
   border-radius:50%;
+  transition:0.2s ease;
   box-shadow:0 0 25px rgba(255,0,0,0.6);
-  margin-bottom:15px;
 }
 
 .username{
-  font-size:26px;
+  margin-top:12px;
+  font-size:28px;
   font-weight:600;
-  color:#ff2e2e;
+  background:linear-gradient(90deg,#ff0000,#ff4d4d,#ffffff,#ff0000);
+  background-size:300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:glowMove 5s linear infinite;
 }
 
 .bio{
-  margin-top:4px;
-  font-size:13px;
+  margin-top:5px;
+  font-size:14px;
   color:#ccc;
 }
 
 .sub{
   font-size:12px;
   color:#666;
-  margin-bottom:20px;
 }
 
-/* ===== EMBED PLAYER (INSIDE PROFILE) ===== */
-.embed-player{
-  margin-top:10px;
-  padding:15px;
-  border-radius:18px;
-  background:rgba(0,0,0,0.4);
-  border:1px solid rgba(255,0,0,0.2);
-}
-
-.song-title{
+.animated-text{
+  margin-top:8px;
   font-size:14px;
-  color:#ff4d4d;
+  color:red;
+  border-right:2px solid red;
+  white-space:nowrap;
+  overflow:hidden;
+  animation:blink 0.8s steps(1) infinite;
 }
 
-.song-artist{
-  font-size:11px;
-  color:#888;
-  margin-bottom:8px;
+.profile-views{
+  margin-top:8px;
+  font-size:12px;
+  color:#ff4444;
+}
+
+/* ===== DISCORD ICON (ATTACHED TO PROFILE) ===== */
+.discord-btn{
+  position:absolute;
+  top:15px;
+  right:15px;
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(15px);
+  border:1px solid rgba(255,0,0,0.4);
+  box-shadow:0 0 20px rgba(255,0,0,0.5);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  transition:0.3s ease;
+}
+
+.discord-btn:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 30px rgba(255,0,0,0.9);
+}
+
+.discord-btn img{
+  width:22px;
+  filter:invert(1);
+}
+
+/* ===== PLAYER ===== */
+.player{
+  position:fixed;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%);
+  width:470px;
+  padding:18px;
+  border-radius:25px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(40px);
+  border:1px solid rgba(255,0,0,0.15);
+  box-shadow:
+    0 25px 60px rgba(0,0,0,0.8),
+    0 0 50px rgba(255,0,0,0.25);
+  display:flex;
+  align-items:center;
+}
+
+.cover{
+  width:60px;
+  height:60px;
+  border-radius:15px;
+}
+
+.info{
+  flex:1;
+  margin-left:15px;
 }
 
 .progress{
   width:100%;
-  height:5px;
+  height:6px;
   background:rgba(255,0,0,0.2);
   border-radius:10px;
+  margin-top:8px;
   overflow:hidden;
 }
 
 .bar{
   height:100%;
   width:0%;
-  background:linear-gradient(90deg,#ff0000,#ff4d4d,#ffffff);
   border-radius:10px;
-  transition:0.2s;
+  background:linear-gradient(90deg,#ff0000,#ff4d4d,#ffffff);
+  background-size:200%;
+  animation:glowMove 3s linear infinite;
 }
 
 .time{
-  font-size:11px;
-  margin-top:6px;
-  color:#aaa;
+  font-size:12px;
+  margin-left:10px;
 }
 
+@keyframes blink{
+  50%{ border-color:transparent; }
+}
+
+@keyframes glowMove{
+  0%{background-position:0%}
+  100%{background-position:300%}
+}
 </style>
 </head>
 
@@ -146,20 +225,26 @@ body{
 <div class="overlay" id="overlay"><span>click to enter</span></div>
 
 <div class="profile">
+  <a href="YOUR_DISCORD_LINK" target="_blank" class="discord-btn">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png">
+  </a>
 
   <img class="avatar" src="nigga.png">
   <div class="username">xazny</div>
   <div class="bio">i can treat you right baee</div>
   <div class="sub">.gg/xtazy</div>
+  <div class="animated-text" id="animatedText"></div>
+  <div class="profile-views" id="profileViews"></div>
+</div>
 
-  <!-- EMBED PLAYER -->
-  <div class="embed-player">
-    <div class="song-title" id="songTitle"></div>
-    <div class="song-artist" id="songArtist"></div>
+<div class="player">
+  <img class="cover" id="cover" src="IMG_5419.jpeg">
+  <div class="info">
+    <h3 id="songTitle"></h3>
+    <p id="songArtist"></p>
     <div class="progress"><div class="bar" id="bar"></div></div>
-    <div class="time" id="time">0:00</div>
   </div>
-
+  <div class="time" id="time">0:00</div>
 </div>
 
 <audio id="audio"></audio>
@@ -171,8 +256,8 @@ const bar = document.getElementById("bar");
 const time = document.getElementById("time");
 
 const songs = [
-  { src:"fwm.mp3", title:"FWM (Unreleased)", artist:"PARTYNEXTDOOR" },
-  { src:"loosemymind.mp3", title:"Loose My Mind", artist:"PARTYNEXTDOOR" }
+  { src:"fwm.mp3", title:"FWM (Unreleased)", artist:"PARTYNEXTDOOR", cover:"IMG_5419.jpeg" },
+  { src:"loosemymind.mp3", title:"Loose My Mind", artist:"PARTYNEXTDOOR", cover:"IMG_5418.jpeg" }
 ];
 
 let currentSong = 0;
@@ -182,6 +267,7 @@ function playSong(index){
   audio.src = song.src;
   document.getElementById("songTitle").textContent = song.title;
   document.getElementById("songArtist").textContent = song.artist;
+  document.getElementById("cover").src = song.cover;
   audio.play();
 }
 
@@ -203,10 +289,37 @@ audio.ontimeupdate = () => {
   const s = Math.floor(audio.currentTime%60).toString().padStart(2,"0");
   time.textContent = `${m}:${s}`;
 };
+
+/* typing */
+const texts=["welcome","to","my","dark","profile"];
+let ti=0,ci=0,del=false;
+function type(){
+  const el=document.getElementById("animatedText");
+  if(!del && ci<texts[ti].length){
+    el.textContent+=texts[ti][ci++];
+    setTimeout(type,100);
+  }else if(!del){
+    del=true; setTimeout(type,1000);
+  }else if(del && ci>0){
+    el.textContent=texts[ti].substring(0,--ci);
+    setTimeout(type,60);
+  }else{
+    del=false; ti=(ti+1)%texts.length;
+    setTimeout(type,300);
+  }
+}
+type();
+
+/* profile views */
+let views=localStorage.getItem("views")||0;
+views++;
+localStorage.setItem("views",views);
+document.getElementById("profileViews").textContent="profile views: "+views;
 </script>
 
 </body>
 </html>
+
 
 
 
