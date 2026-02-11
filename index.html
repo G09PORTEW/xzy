@@ -18,26 +18,27 @@ body { height:100vh; color:white; overflow:hidden; background:#000; }
 
 /* Profile */
 .profile { position:absolute; top:20%; left:50%; transform:translate(-50%,-20%); text-align:center; color:white; }
-.avatar { width:100px; height:100px; border-radius:50%; border:2px solid red; }
-.username { margin-top:10px; font-size:28px; color:red; }
-.bio { font-size:14px; margin-top:4px; }
-.sub { font-size:12px; opacity:0.6; }
+.avatar { width:100px; height:100px; border-radius:50%; border:2px solid #ff00ff; }
+.username { margin-top:10px; font-size:28px; color:#ff00ff; text-shadow:0 0 5px #ff00ff,0 0 10px #00ffff; }
+.bio { font-size:14px; color:#ff00ff; text-shadow:0 0 5px #ff00ff,0 0 10px #00ffff; margin-top:4px; }
+.sub { font-size:12px; color:#00ffff; text-shadow:0 0 5px #00ffff,0 0 10px #ff00ff; opacity:0.8; }
 
 /* Animated text */
 .animated-text { 
   margin-top:6px; 
   font-size:14px; 
-  color:red; /* changed to red */
+  color:#ff0099; 
   height:20px; 
   overflow:hidden; 
   white-space:nowrap; 
-  border-right:2px solid red; /* cursor matches text */
-  animation:blink 0.7s steps(1) infinite; 
+  border-right:2px solid #ff0099; 
+  animation:blink 0.7s steps(1) infinite;
+  text-shadow:0 0 5px #ff00ff,0 0 10px #00ffff;
 }
 @keyframes blink { 50% { border-color:transparent; } }
 
 /* Profile views */
-.profile-views { margin-top:6px; font-size:12px; opacity:0.6; }
+.profile-views { margin-top:6px; font-size:12px; color:#00ffff; text-shadow:0 0 5px #00ffff,0 0 10px #ff00ff; opacity:0.8; }
 
 /* NEON GLOW SPOTIFY PLAYER */
 .player { position:fixed; bottom:25px; left:50%; transform:translateX(-50%); width:440px; padding:16px; border-radius:20px; background:rgba(0,0,0,0.5); backdrop-filter:blur(25px) saturate(200%); display:flex; align-items:center; box-shadow:0 0 20px #ff00ff,0 0 40px #00ffff,0 0 60px #ff00ff,0 0 80px #00ffff; border:1px solid rgba(255,255,255,0.2); animation:glow 2s ease-in-out infinite alternate; transition: transform 0.05s ease; }
@@ -45,16 +46,16 @@ body { height:100vh; color:white; overflow:hidden; background:#000; }
 
 .cover { width:56px; height:56px; border-radius:12px; margin-right:16px; box-shadow:0 0 20px #ff00ff,0 0 40px #00ffff; transition: transform 0.1s ease; }
 
-.info h3 { font-size:14px; color:#fff; text-shadow:0 0 5px #ff00ff,0 0 10px #00ffff; }
-.info p { font-size:12px; opacity:0.8; color:#fff; text-shadow:0 0 5px #00ffff,0 0 10px #ff00ff; }
+.info h3 { font-size:14px; color:#ff00ff; text-shadow:0 0 5px #ff00ff,0 0 10px #00ffff; }
+.info p { font-size:12px; color:#00ffff; text-shadow:0 0 5px #00ffff,0 0 10px #ff00ff; opacity:0.8; }
 
 /* RGB animated progress bar */
 .progress { width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:10px; margin-top:6px; overflow:hidden; box-shadow:0 0 10px #ff00ff,0 0 20px #00ffff inset; }
-.bar { height:100%; width:0%; border-radius:10px; background:linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet); background-size:200% 100%; animation:rainbow 2s linear infinite; box-shadow:0 0 20px #ff00ff,0 0 40px #00ffff; transition: box-shadow 0.1s ease, transform 0.1s ease; }
+.bar { height:100%; width:0%; border-radius:10px; background:linear-gradient(90deg, #ff00ff, #ff0099, #00ffff, #00ffea); background-size:200% 100%; animation:rainbow 2s linear infinite; box-shadow:0 0 20px #ff00ff,0 0 40px #00ffff; transition: box-shadow 0.1s ease, transform 0.1s ease; }
 
 @keyframes rainbow { 0% { background-position:0% 0%; } 100% { background-position:200% 0%; } }
 
-.time { font-size:11px; opacity:0.8; margin-left:12px; color:#fff; text-shadow:0 0 5px #ff00ff,0 0 10px #00ffff; }
+.time { font-size:11px; opacity:0.8; margin-left:12px; color:#ff00ff; text-shadow:0 0 5px #ff00ff,0 0 10px #00ffff; }
 </style>
 </head>
 
@@ -98,7 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.style.display = "none";
     await audio.play();
 
-    // Web Audio API for beat detection
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const source = audioCtx.createMediaElementSource(audio);
     const analyser = audioCtx.createAnalyser();
@@ -132,7 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
     animateBeat();
   };
 
-  // Update time display
   audio.ontimeupdate = () => {
     const m = Math.floor(audio.currentTime/60);
     const s = Math.floor(audio.currentTime%60).toString().padStart(2,"0");
@@ -161,7 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   typeText();
 
-  // Profile views
   let views = localStorage.getItem('profileViews') || 0;
   views = parseInt(views)+1;
   localStorage.setItem('profileViews',views);
@@ -170,9 +168,3 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
-
-
-
-
-
-
