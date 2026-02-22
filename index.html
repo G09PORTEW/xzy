@@ -35,58 +35,121 @@
 </script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-body{height:100vh;overflow:hidden;background:black;color:white;}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
+}
 
+body{
+  height:100vh;
+  overflow:hidden;
+  background:black;
+  color:white;
+}
+
+/* ===== BACKGROUND ===== */
 .bg{
-  position:fixed;inset:0;
+  position:fixed;
+  inset:0;
   background:url("https://media1.giphy.com/media/VLWRAim5Qk0FNtNCuV/giphy.gif") center/cover no-repeat;
-  filter:blur(6px) brightness(0.45);
+  filter:blur(8px) brightness(0.4) contrast(1.2);
   z-index:-3;
 }
 
-.overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,0.7);
-  display:flex;justify-content:center;align-items:center;
-  z-index:10;cursor:pointer;
+.bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle, transparent 40%, rgba(0,0,0,0.85));
 }
+
+/* ===== OVERLAY ===== */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(10px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:10;
+  cursor:pointer;
+}
+
 .overlay span{
-  padding:18px 38px;border-radius:20px;
+  padding:18px 38px;
+  border-radius:20px;
   background:rgba(255,0,0,0.1);
   border:1px solid rgba(255,0,0,0.3);
   box-shadow:0 0 40px rgba(255,0,0,0.4);
+  font-size:22px;
 }
 
-/* PROFILE */
+/* ===== PROFILE CARD ===== */
 .profile{
-  position:absolute;top:22%;left:50%;
+  position:absolute;
+  top:22%;
+  left:50%;
   transform:translate(-50%,-20%);
-  text-align:center;padding:35px 45px;
+  text-align:center;
+  padding:35px 45px;
   border-radius:25px;
   background:rgba(255,255,255,0.04);
-  backdrop-filter:blur(30px);
+  backdrop-filter:blur(30px) saturate(160%);
   border:1px solid rgba(255,0,0,0.15);
-  box-shadow:0 0 40px rgba(255,0,0,0.3);
+  box-shadow:
+    0 25px 60px rgba(0,0,0,0.8),
+    0 0 50px rgba(255,0,0,0.2);
 }
 
-.avatar{width:110px;height:110px;border-radius:50%;box-shadow:0 0 25px red;}
+.avatar{
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  box-shadow:0 0 25px rgba(255,0,0,0.6);
+}
 
 .username{
-  margin-top:12px;font-size:28px;
-  background:linear-gradient(90deg,#ff0000,#ffffff,#ff0000);
+  margin-top:12px;
+  font-size:28px;
+  font-weight:600;
+  background:linear-gradient(90deg,#ff0000,#ff4d4d,#ffffff,#ff0000);
   background-size:300%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation:glow 4s linear infinite;
+  animation:glowMove 5s linear infinite;
 }
 
-.bio{font-size:14px;color:#ccc;}
-.sub{font-size:12px;color:#666;}
-.animated-text{margin-top:8px;font-size:14px;color:red;border-right:2px solid red;}
-.profile-views{margin-top:8px;font-size:12px;color:#ff4444;}
+.bio{
+  margin-top:5px;
+  font-size:14px;
+  color:#ccc;
+}
 
-/* DISCORD BUTTON */
+.sub{
+  font-size:12px;
+  color:#666;
+}
+
+.animated-text{
+  margin-top:8px;
+  font-size:14px;
+  color:red;
+  border-right:2px solid red;
+  white-space:nowrap;
+  overflow:hidden;
+  animation:blink 0.8s steps(1) infinite;
+}
+
+.profile-views{
+  margin-top:8px;
+  font-size:12px;
+  color:#ff4444;
+}
+
+/* ===== DISCORD BUTTON ===== */
 .discord-btn{
   position:absolute;
   top:15px;
@@ -95,6 +158,7 @@ body{height:100vh;overflow:hidden;background:black;color:white;}
   height:40px;
   border-radius:12px;
   background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(15px);
   border:1px solid rgba(255,0,0,0.4);
   box-shadow:0 0 20px rgba(255,0,0,0.5);
   display:flex;
@@ -103,31 +167,75 @@ body{height:100vh;overflow:hidden;background:black;color:white;}
   cursor:pointer;
   transition:0.3s ease;
 }
+
 .discord-btn:hover{
   transform:scale(1.1);
   box-shadow:0 0 30px rgba(255,0,0,0.9);
 }
+
 .discord-btn img{
   width:22px;
   filter:invert(1);
 }
 
-/* PLAYER */
+/* ===== PLAYER ===== */
 .player{
-  position:fixed;bottom:30px;left:50%;
+  position:fixed;
+  bottom:30px;
+  left:50%;
   transform:translateX(-50%);
-  width:470px;padding:18px;border-radius:25px;
+  width:470px;
+  padding:18px;
+  border-radius:25px;
   background:rgba(255,255,255,0.05);
   backdrop-filter:blur(40px);
-  display:flex;align-items:center;
+  border:1px solid rgba(255,0,0,0.15);
+  box-shadow:
+    0 25px 60px rgba(0,0,0,0.8),
+    0 0 50px rgba(255,0,0,0.25);
+  display:flex;
+  align-items:center;
 }
-.cover{width:60px;height:60px;border-radius:15px;}
-.info{flex:1;margin-left:15px;}
-.progress{width:100%;height:6px;background:rgba(255,0,0,0.2);border-radius:10px;margin-top:8px;}
-.bar{height:100%;width:0%;background:red;border-radius:10px;}
-.time{font-size:12px;margin-left:10px;}
 
-@keyframes glow{
+.cover{
+  width:60px;
+  height:60px;
+  border-radius:15px;
+}
+
+.info{
+  flex:1;
+  margin-left:15px;
+}
+
+.progress{
+  width:100%;
+  height:6px;
+  background:rgba(255,0,0,0.2);
+  border-radius:10px;
+  margin-top:8px;
+  overflow:hidden;
+}
+
+.bar{
+  height:100%;
+  width:0%;
+  border-radius:10px;
+  background:linear-gradient(90deg,#ff0000,#ff4d4d,#ffffff);
+  background-size:200%;
+  animation:glowMove 3s linear infinite;
+}
+
+.time{
+  font-size:12px;
+  margin-left:10px;
+}
+
+@keyframes blink{
+  50%{ border-color:transparent; }
+}
+
+@keyframes glowMove{
   0%{background-position:0%}
   100%{background-position:300%}
 }
@@ -140,7 +248,6 @@ body{height:100vh;overflow:hidden;background:black;color:white;}
 <div class="overlay" id="overlay"><span>click to enter</span></div>
 
 <div class="profile">
-
   <a href="https://discord.gg/xtazy" target="_blank" class="discord-btn">
     <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png">
   </a>
@@ -166,61 +273,61 @@ body{height:100vh;overflow:hidden;background:black;color:white;}
 <audio id="audio"></audio>
 
 <script>
-const overlay=document.getElementById("overlay");
-const audio=document.getElementById("audio");
-const bar=document.getElementById("bar");
-const time=document.getElementById("time");
+const overlay = document.getElementById("overlay");
+const audio = document.getElementById("audio");
+const bar = document.getElementById("bar");
+const time = document.getElementById("time");
 
-const songs=[
-  {src:"fwm.mp3",title:"FWM (Unreleased)",artist:"PARTYNEXTDOOR",cover:"IMG_5419.jpeg"},
-  {src:"loosemymind.mp3",title:"Loose My Mind",artist:"PARTYNEXTDOOR",cover:"IMG_5418.jpeg"}
+const songs = [
+  { src:"fwm.mp3", title:"FWM (Unreleased)", artist:"PARTYNEXTDOOR", cover:"IMG_5419.jpeg" },
+  { src:"loosemymind.mp3", title:"Loose My Mind", artist:"PARTYNEXTDOOR", cover:"IMG_5418.jpeg" }
 ];
 
-let currentSong=0;
+let currentSong = 0;
 
-function playSong(i){
-  let s=songs[i];
-  audio.src=s.src;
-  songTitle.textContent=s.title;
-  songArtist.textContent=s.artist;
-  cover.src=s.cover;
+function playSong(index){
+  const song = songs[index];
+  audio.src = song.src;
+  songTitle.textContent = song.title;
+  songArtist.textContent = song.artist;
+  cover.src = song.cover;
   audio.play();
 }
 
-overlay.onclick=()=>{
-  overlay.style.display="none";
+overlay.onclick = () => {
+  overlay.style.display = "none";
   playSong(currentSong);
 };
 
-audio.onended=()=>{
-  currentSong=(currentSong+1)%songs.length;
+audio.onended = () => {
+  currentSong = (currentSong+1)%songs.length;
   playSong(currentSong);
 };
 
-audio.ontimeupdate=()=>{
+audio.ontimeupdate = () => {
   if(audio.duration){
-    bar.style.width=(audio.currentTime/audio.duration*100)+"%";
+    bar.style.width = (audio.currentTime/audio.duration*100)+"%";
   }
-  let m=Math.floor(audio.currentTime/60);
-  let s=Math.floor(audio.currentTime%60).toString().padStart(2,"0");
-  time.textContent=`${m}:${s}`;
+  const m = Math.floor(audio.currentTime/60);
+  const s = Math.floor(audio.currentTime%60).toString().padStart(2,"0");
+  time.textContent = `${m}:${s}`;
 };
 
 /* typing */
 const texts=["wag","kang","tanga","bobo!","tangina mo!"];
 let ti=0,ci=0,del=false;
 function type(){
-  let el=document.getElementById("animatedText");
+  const el=document.getElementById("animatedText");
   if(!del && ci<texts[ti].length){
     el.textContent+=texts[ti][ci++];
     setTimeout(type,100);
   }else if(!del){
-    del=true;setTimeout(type,1000);
+    del=true; setTimeout(type,1000);
   }else if(del && ci>0){
     el.textContent=texts[ti].substring(0,--ci);
     setTimeout(type,60);
   }else{
-    del=false;ti=(ti+1)%texts.length;
+    del=false; ti=(ti+1)%texts.length;
     setTimeout(type,300);
   }
 }
@@ -235,6 +342,8 @@ profileViews.textContent="XXX: "+views;
 
 </body>
 </html>
+
+
 
 
 
