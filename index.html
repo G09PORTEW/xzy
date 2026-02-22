@@ -58,6 +58,7 @@ body{height:100vh;overflow:hidden;background:black;color:white;}
   box-shadow:0 0 40px rgba(255,0,0,0.4);
 }
 
+/* PROFILE */
 .profile{
   position:absolute;top:22%;left:50%;
   transform:translate(-50%,-20%);
@@ -85,6 +86,33 @@ body{height:100vh;overflow:hidden;background:black;color:white;}
 .animated-text{margin-top:8px;font-size:14px;color:red;border-right:2px solid red;}
 .profile-views{margin-top:8px;font-size:12px;color:#ff4444;}
 
+/* DISCORD BUTTON */
+.discord-btn{
+  position:absolute;
+  top:15px;
+  right:15px;
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,0,0,0.4);
+  box-shadow:0 0 20px rgba(255,0,0,0.5);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  transition:0.3s ease;
+}
+.discord-btn:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 30px rgba(255,0,0,0.9);
+}
+.discord-btn img{
+  width:22px;
+  filter:invert(1);
+}
+
+/* PLAYER */
 .player{
   position:fixed;bottom:30px;left:50%;
   transform:translateX(-50%);
@@ -112,9 +140,14 @@ body{height:100vh;overflow:hidden;background:black;color:white;}
 <div class="overlay" id="overlay"><span>click to enter</span></div>
 
 <div class="profile">
+
+  <a href="https://discord.gg/xtazy" target="_blank" class="discord-btn">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png">
+  </a>
+
   <img class="avatar" src="nigga.png">
   <div class="username">xazny</div>
-  <div class="bio">i can treat you right and f you right bae</div>
+  <div class="bio">i can treat you right</div>
   <div class="sub">.gg/xtazy</div>
   <div class="animated-text" id="animatedText"></div>
   <div class="profile-views" id="profileViews"></div>
@@ -142,6 +175,7 @@ const songs=[
   {src:"fwm.mp3",title:"FWM (Unreleased)",artist:"PARTYNEXTDOOR",cover:"IMG_5419.jpeg"},
   {src:"loosemymind.mp3",title:"Loose My Mind",artist:"PARTYNEXTDOOR",cover:"IMG_5418.jpeg"}
 ];
+
 let currentSong=0;
 
 function playSong(i){
@@ -201,6 +235,7 @@ profileViews.textContent="XXX: "+views;
 
 </body>
 </html>
+
 
 
 
