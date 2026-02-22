@@ -5,8 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>xazny was here</title>
 
+<!-- VIEW-SOURCE TROLL -->
 <script>
-/* ===== ANTI INSPECT (DETERRENT ONLY) ===== */
+if (location.href.startsWith("view-source:")) {
+  document.open();
+  document.write("<h1 style='background:black;color:red;font-family:Arial;text-align:center;margin-top:40vh;'>NO SKID BITCHHH</h1>");
+  document.close();
+}
+</script>
+
+<!-- ANTI INSPECT (DETERRENT) -->
+<script>
 (function(){
   document.addEventListener("contextmenu", e => e.preventDefault());
 
@@ -49,7 +58,7 @@ body{
   color:white;
 }
 
-/* ===== BACKGROUND ===== */
+/* BACKGROUND */
 .bg{
   position:fixed;
   inset:0;
@@ -57,7 +66,6 @@ body{
   filter:blur(8px) brightness(0.4) contrast(1.2);
   z-index:-3;
 }
-
 .bg::after{
   content:"";
   position:absolute;
@@ -65,7 +73,7 @@ body{
   background:radial-gradient(circle, transparent 40%, rgba(0,0,0,0.85));
 }
 
-/* ===== OVERLAY ===== */
+/* OVERLAY */
 .overlay{
   position:fixed;
   inset:0;
@@ -77,7 +85,6 @@ body{
   z-index:10;
   cursor:pointer;
 }
-
 .overlay span{
   padding:18px 38px;
   border-radius:20px;
@@ -87,7 +94,7 @@ body{
   font-size:22px;
 }
 
-/* ===== PROFILE CARD ===== */
+/* PROFILE */
 .profile{
   position:absolute;
   top:22%;
@@ -122,34 +129,12 @@ body{
   animation:glowMove 5s linear infinite;
 }
 
-.bio{
-  margin-top:5px;
-  font-size:14px;
-  color:#ccc;
-}
+.bio{margin-top:5px;font-size:14px;color:#ccc;}
+.sub{font-size:12px;color:#666;}
+.animated-text{margin-top:8px;font-size:14px;color:red;border-right:2px solid red;white-space:nowrap;overflow:hidden;animation:blink 0.8s steps(1) infinite;}
+.profile-views{margin-top:8px;font-size:12px;color:#ff4444;}
 
-.sub{
-  font-size:12px;
-  color:#666;
-}
-
-.animated-text{
-  margin-top:8px;
-  font-size:14px;
-  color:red;
-  border-right:2px solid red;
-  white-space:nowrap;
-  overflow:hidden;
-  animation:blink 0.8s steps(1) infinite;
-}
-
-.profile-views{
-  margin-top:8px;
-  font-size:12px;
-  color:#ff4444;
-}
-
-/* ===== DISCORD BUTTON ===== */
+/* DISCORD BUTTON */
 .discord-btn{
   position:absolute;
   top:15px;
@@ -167,18 +152,13 @@ body{
   cursor:pointer;
   transition:0.3s ease;
 }
-
 .discord-btn:hover{
   transform:scale(1.1);
   box-shadow:0 0 30px rgba(255,0,0,0.9);
 }
+.discord-btn img{width:22px;filter:invert(1);}
 
-.discord-btn img{
-  width:22px;
-  filter:invert(1);
-}
-
-/* ===== PLAYER ===== */
+/* PLAYER */
 .player{
   position:fixed;
   bottom:30px;
@@ -197,48 +177,14 @@ body{
   align-items:center;
 }
 
-.cover{
-  width:60px;
-  height:60px;
-  border-radius:15px;
-}
+.cover{width:60px;height:60px;border-radius:15px;}
+.info{flex:1;margin-left:15px;}
+.progress{width:100%;height:6px;background:rgba(255,0,0,0.2);border-radius:10px;margin-top:8px;overflow:hidden;}
+.bar{height:100%;width:0%;border-radius:10px;background:linear-gradient(90deg,#ff0000,#ff4d4d,#ffffff);background-size:200%;animation:glowMove 3s linear infinite;}
+.time{font-size:12px;margin-left:10px;}
 
-.info{
-  flex:1;
-  margin-left:15px;
-}
-
-.progress{
-  width:100%;
-  height:6px;
-  background:rgba(255,0,0,0.2);
-  border-radius:10px;
-  margin-top:8px;
-  overflow:hidden;
-}
-
-.bar{
-  height:100%;
-  width:0%;
-  border-radius:10px;
-  background:linear-gradient(90deg,#ff0000,#ff4d4d,#ffffff);
-  background-size:200%;
-  animation:glowMove 3s linear infinite;
-}
-
-.time{
-  font-size:12px;
-  margin-left:10px;
-}
-
-@keyframes blink{
-  50%{ border-color:transparent; }
-}
-
-@keyframes glowMove{
-  0%{background-position:0%}
-  100%{background-position:300%}
-}
+@keyframes blink{50%{border-color:transparent;}}
+@keyframes glowMove{0%{background-position:0%}100%{background-position:300%}}
 </style>
 </head>
 
@@ -273,44 +219,44 @@ body{
 <audio id="audio"></audio>
 
 <script>
-const overlay = document.getElementById("overlay");
-const audio = document.getElementById("audio");
-const bar = document.getElementById("bar");
-const time = document.getElementById("time");
+const overlay=document.getElementById("overlay");
+const audio=document.getElementById("audio");
+const bar=document.getElementById("bar");
+const time=document.getElementById("time");
 
-const songs = [
+const songs=[
   { src:"fwm.mp3", title:"FWM (Unreleased)", artist:"PARTYNEXTDOOR", cover:"IMG_5419.jpeg" },
   { src:"loosemymind.mp3", title:"Loose My Mind", artist:"PARTYNEXTDOOR", cover:"IMG_5418.jpeg" }
 ];
 
-let currentSong = 0;
+let currentSong=0;
 
-function playSong(index){
-  const song = songs[index];
-  audio.src = song.src;
-  songTitle.textContent = song.title;
-  songArtist.textContent = song.artist;
-  cover.src = song.cover;
+function playSong(i){
+  const s=songs[i];
+  audio.src=s.src;
+  songTitle.textContent=s.title;
+  songArtist.textContent=s.artist;
+  cover.src=s.cover;
   audio.play();
 }
 
-overlay.onclick = () => {
-  overlay.style.display = "none";
+overlay.onclick=()=>{
+  overlay.style.display="none";
   playSong(currentSong);
 };
 
-audio.onended = () => {
-  currentSong = (currentSong+1)%songs.length;
+audio.onended=()=>{
+  currentSong=(currentSong+1)%songs.length;
   playSong(currentSong);
 };
 
-audio.ontimeupdate = () => {
+audio.ontimeupdate=()=>{
   if(audio.duration){
-    bar.style.width = (audio.currentTime/audio.duration*100)+"%";
+    bar.style.width=(audio.currentTime/audio.duration*100)+"%";
   }
-  const m = Math.floor(audio.currentTime/60);
-  const s = Math.floor(audio.currentTime%60).toString().padStart(2,"0");
-  time.textContent = `${m}:${s}`;
+  let m=Math.floor(audio.currentTime/60);
+  let s=Math.floor(audio.currentTime%60).toString().padStart(2,"0");
+  time.textContent=`${m}:${s}`;
 };
 
 /* typing */
@@ -322,12 +268,12 @@ function type(){
     el.textContent+=texts[ti][ci++];
     setTimeout(type,100);
   }else if(!del){
-    del=true; setTimeout(type,1000);
+    del=true;setTimeout(type,1000);
   }else if(del && ci>0){
     el.textContent=texts[ti].substring(0,--ci);
     setTimeout(type,60);
   }else{
-    del=false; ti=(ti+1)%texts.length;
+    del=false;ti=(ti+1)%texts.length;
     setTimeout(type,300);
   }
 }
@@ -342,6 +288,8 @@ profileViews.textContent="XXX: "+views;
 
 </body>
 </html>
+
+
 
 
 
