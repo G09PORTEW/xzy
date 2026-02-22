@@ -5,176 +5,104 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>xazny was here</title>
 
+<script>
+/* ===== ANTI INSPECT (DETERRENT ONLY) ===== */
+(function(){
+  document.addEventListener("contextmenu", e => e.preventDefault());
+
+  document.onkeydown = function(e){
+    if(
+      e.keyCode === 123 || 
+      (e.ctrlKey && e.shiftKey && [73,74,67].includes(e.keyCode)) ||
+      (e.ctrlKey && e.keyCode === 85)
+    ){
+      e.preventDefault();
+      location.replace("about:blank");
+    }
+  };
+
+  let limit = 160;
+  setInterval(() => {
+    if (
+      window.outerWidth - window.innerWidth > limit ||
+      window.outerHeight - window.innerHeight > limit
+    ) {
+      document.body.innerHTML = "";
+      location.replace("about:blank");
+    }
+  }, 400);
+})();
+</script>
+
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial, sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body{height:100vh;overflow:hidden;background:black;color:white;}
 
-body{
-  height:100vh;
-  overflow:hidden;
-  background:black;
-  color:white;
-}
-
-/* ===== BACKGROUND ===== */
 .bg{
-  position:fixed;
-  inset:0;
+  position:fixed;inset:0;
   background:url("https://media1.giphy.com/media/VLWRAim5Qk0FNtNCuV/giphy.gif") center/cover no-repeat;
-  filter:blur(6px) brightness(0.45) contrast(1.2);
+  filter:blur(6px) brightness(0.45);
   z-index:-3;
 }
 
-.bg::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle, transparent 40%, rgba(0,0,0,0.85));
-}
-
-/* ===== OVERLAY ===== */
 .overlay{
-  position:fixed;
-  inset:0;
+  position:fixed;inset:0;
   background:rgba(0,0,0,0.7);
-  backdrop-filter:blur(8px);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:10;
-  cursor:pointer;
+  display:flex;justify-content:center;align-items:center;
+  z-index:10;cursor:pointer;
 }
-
 .overlay span{
-  padding:18px 38px;
-  border-radius:20px;
+  padding:18px 38px;border-radius:20px;
   background:rgba(255,0,0,0.1);
   border:1px solid rgba(255,0,0,0.3);
   box-shadow:0 0 40px rgba(255,0,0,0.4);
-  font-size:22px;
 }
 
-/* ===== PROFILE ===== */
 .profile{
-  position:absolute;
-  top:22%;
-  left:50%;
+  position:absolute;top:22%;left:50%;
   transform:translate(-50%,-20%);
-  text-align:center;
-  padding:35px 45px;
+  text-align:center;padding:35px 45px;
   border-radius:25px;
   background:rgba(255,255,255,0.04);
-  backdrop-filter:blur(30px) saturate(160%);
+  backdrop-filter:blur(30px);
   border:1px solid rgba(255,0,0,0.15);
-  box-shadow:
-    0 25px 60px rgba(0,0,0,0.8),
-    0 0 50px rgba(255,0,0,0.2);
+  box-shadow:0 0 40px rgba(255,0,0,0.3);
 }
 
-.avatar{
-  width:110px;
-  height:110px;
-  border-radius:50%;
-  box-shadow:0 0 25px rgba(255,0,0,0.6);
-}
+.avatar{width:110px;height:110px;border-radius:50%;box-shadow:0 0 25px red;}
 
 .username{
-  margin-top:12px;
-  font-size:28px;
-  font-weight:600;
-  background:linear-gradient(90deg,#ff0000,#ff4d4d,#ffffff,#ff0000);
+  margin-top:12px;font-size:28px;
+  background:linear-gradient(90deg,#ff0000,#ffffff,#ff0000);
   background-size:300%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation:glowMove 5s linear infinite;
+  animation:glow 4s linear infinite;
 }
 
-.bio{
-  margin-top:5px;
-  font-size:14px;
-  color:#ccc;
-}
+.bio{font-size:14px;color:#ccc;}
+.sub{font-size:12px;color:#666;}
+.animated-text{margin-top:8px;font-size:14px;color:red;border-right:2px solid red;}
+.profile-views{margin-top:8px;font-size:12px;color:#ff4444;}
 
-.sub{
-  font-size:12px;
-  color:#666;
-}
-
-.animated-text{
-  margin-top:8px;
-  font-size:14px;
-  color:red;
-  border-right:2px solid red;
-  white-space:nowrap;
-  overflow:hidden;
-  animation:blink 0.8s steps(1) infinite;
-}
-
-.profile-views{
-  margin-top:8px;
-  font-size:12px;
-  color:#ff4444;
-}
-
-/* ===== PLAYER ===== */
 .player{
-  position:fixed;
-  bottom:30px;
-  left:50%;
+  position:fixed;bottom:30px;left:50%;
   transform:translateX(-50%);
-  width:470px;
-  padding:18px;
-  border-radius:25px;
+  width:470px;padding:18px;border-radius:25px;
   background:rgba(255,255,255,0.05);
   backdrop-filter:blur(40px);
-  border:1px solid rgba(255,0,0,0.15);
-  box-shadow:
-    0 25px 60px rgba(0,0,0,0.8),
-    0 0 50px rgba(255,0,0,0.25);
-  display:flex;
-  align-items:center;
+  display:flex;align-items:center;
 }
+.cover{width:60px;height:60px;border-radius:15px;}
+.info{flex:1;margin-left:15px;}
+.progress{width:100%;height:6px;background:rgba(255,0,0,0.2);border-radius:10px;margin-top:8px;}
+.bar{height:100%;width:0%;background:red;border-radius:10px;}
+.time{font-size:12px;margin-left:10px;}
 
-.cover{
-  width:60px;
-  height:60px;
-  border-radius:15px;
+@keyframes glow{
+  0%{background-position:0%}
+  100%{background-position:300%}
 }
-
-.info{
-  flex:1;
-  margin-left:15px;
-}
-
-.progress{
-  width:100%;
-  height:6px;
-  background:rgba(255,0,0,0.2);
-  border-radius:10px;
-  margin-top:8px;
-  overflow:hidden;
-}
-
-.bar{
-  height:100%;
-  width:0%;
-  border-radius:10px;
-  background:linear-gradient(90deg,#ff0000,#ff4d4d,#ffffff);
-  background-size:200%;
-  animation:glowMove 3s linear infinite;
-}
-
-.time{
-  font-size:12px;
-  margin-left:10px;
-}
-
-@keyframes blink{50%{border-color:transparent;}}
-@keyframes glowMove{0%{background-position:0%}100%{background-position:300%}}
 </style>
 </head>
 
@@ -186,7 +114,7 @@ body{
 <div class="profile">
   <img class="avatar" src="nigga.png">
   <div class="username">xazny</div>
-  <div class="bio">i can treat you right and fuck you right bae</div>
+  <div class="bio">i can treat you right and f you right bae</div>
   <div class="sub">.gg/xtazy</div>
   <div class="animated-text" id="animatedText"></div>
   <div class="profile-views" id="profileViews"></div>
@@ -205,34 +133,6 @@ body{
 <audio id="audio"></audio>
 
 <script>
-// ===== ANTI INSPECT =====
-document.addEventListener("contextmenu", e => e.preventDefault());
-
-document.addEventListener("keydown", e => {
-  if (
-    e.key === "F12" ||
-    (e.ctrlKey && e.shiftKey && ["I","C","J"].includes(e.key)) ||
-    (e.ctrlKey && e.key === "U")
-  ) {
-    e.preventDefault();
-    document.body.innerHTML="";
-    location.href="about:blank";
-  }
-});
-
-// Detect devtools
-let devtools=false;
-setInterval(()=>{
-  if(window.outerWidth-window.innerWidth>160 || window.outerHeight-window.innerHeight>160){
-    if(!devtools){
-      devtools=true;
-      document.body.innerHTML="";
-      location.href="about:blank";
-    }
-  }
-},500);
-
-// ===== AUDIO PLAYER =====
 const overlay=document.getElementById("overlay");
 const audio=document.getElementById("audio");
 const bar=document.getElementById("bar");
@@ -242,11 +142,10 @@ const songs=[
   {src:"fwm.mp3",title:"FWM (Unreleased)",artist:"PARTYNEXTDOOR",cover:"IMG_5419.jpeg"},
   {src:"loosemymind.mp3",title:"Loose My Mind",artist:"PARTYNEXTDOOR",cover:"IMG_5418.jpeg"}
 ];
-
 let currentSong=0;
 
 function playSong(i){
-  const s=songs[i];
+  let s=songs[i];
   audio.src=s.src;
   songTitle.textContent=s.title;
   songArtist.textContent=s.artist;
@@ -273,28 +172,27 @@ audio.ontimeupdate=()=>{
   time.textContent=`${m}:${s}`;
 };
 
-// ===== TYPING TEXT =====
+/* typing */
 const texts=["wag","kang","tanga","bobo!","tangina mo!"];
 let ti=0,ci=0,del=false;
-
 function type(){
-  const el=document.getElementById("animatedText");
+  let el=document.getElementById("animatedText");
   if(!del && ci<texts[ti].length){
     el.textContent+=texts[ti][ci++];
     setTimeout(type,100);
   }else if(!del){
-    del=true; setTimeout(type,1000);
+    del=true;setTimeout(type,1000);
   }else if(del && ci>0){
     el.textContent=texts[ti].substring(0,--ci);
     setTimeout(type,60);
   }else{
-    del=false; ti=(ti+1)%texts.length;
+    del=false;ti=(ti+1)%texts.length;
     setTimeout(type,300);
   }
 }
 type();
 
-// ===== VIEWS =====
+/* views */
 let views=localStorage.getItem("views")||0;
 views++;
 localStorage.setItem("views",views);
@@ -303,6 +201,7 @@ profileViews.textContent="XXX: "+views;
 
 </body>
 </html>
+
 
 
 
