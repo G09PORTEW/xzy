@@ -20,7 +20,7 @@ body{
   color:white;
 }
 
-/* ===== BACKGROUND (45% BLUR) ===== */
+/* ===== BACKGROUND ===== */
 .bg{
   position:fixed;
   inset:0;
@@ -58,7 +58,7 @@ body{
   font-size:22px;
 }
 
-/* ===== PROFILE CARD ===== */
+/* ===== PROFILE ===== */
 .profile{
   position:absolute;
   top:22%;
@@ -73,18 +73,12 @@ body{
   box-shadow:
     0 25px 60px rgba(0,0,0,0.8),
     0 0 50px rgba(255,0,0,0.2);
-  transition:0.3s ease;
-}
-
-.profile:hover{
-  transform:translate(-50%,-22%) scale(1.03);
 }
 
 .avatar{
   width:110px;
   height:110px;
   border-radius:50%;
-  transition:0.2s ease;
   box-shadow:0 0 25px rgba(255,0,0,0.6);
 }
 
@@ -124,35 +118,6 @@ body{
   margin-top:8px;
   font-size:12px;
   color:#ff4444;
-}
-
-/* ===== DISCORD ICON (ATTACHED TO PROFILE) ===== */
-.discord-btn{
-  position:absolute;
-  top:15px;
-  right:15px;
-  width:40px;
-  height:40px;
-  border-radius:12px;
-  background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(15px);
-  border:1px solid rgba(255,0,0,0.4);
-  box-shadow:0 0 20px rgba(255,0,0,0.5);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  cursor:pointer;
-  transition:0.3s ease;
-}
-
-.discord-btn:hover{
-  transform:scale(1.1);
-  box-shadow:0 0 30px rgba(255,0,0,0.9);
-}
-
-.discord-btn img{
-  width:22px;
-  filter:invert(1);
 }
 
 /* ===== PLAYER ===== */
@@ -208,14 +173,8 @@ body{
   margin-left:10px;
 }
 
-@keyframes blink{
-  50%{ border-color:transparent; }
-}
-
-@keyframes glowMove{
-  0%{background-position:0%}
-  100%{background-position:300%}
-}
+@keyframes blink{50%{border-color:transparent;}}
+@keyframes glowMove{0%{background-position:0%}100%{background-position:300%}}
 </style>
 </head>
 
@@ -225,10 +184,6 @@ body{
 <div class="overlay" id="overlay"><span>click to enter</span></div>
 
 <div class="profile">
-  <a href="https://discord.gg/xtazy" target="_blank" class="discord-btn">
-    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png">
-  </a>
-
   <img class="avatar" src="nigga.png">
   <div class="username">xazny</div>
   <div class="bio">i can treat you right and fuck you right bae</div>
@@ -250,49 +205,78 @@ body{
 <audio id="audio"></audio>
 
 <script>
-const overlay = document.getElementById("overlay");
-const audio = document.getElementById("audio");
-const bar = document.getElementById("bar");
-const time = document.getElementById("time");
+// ===== ANTI INSPECT =====
+document.addEventListener("contextmenu", e => e.preventDefault());
 
-const songs = [
-  { src:"fwm.mp3", title:"FWM (Unreleased)", artist:"PARTYNEXTDOOR", cover:"IMG_5419.jpeg" },
-  { src:"loosemymind.mp3", title:"Loose My Mind", artist:"PARTYNEXTDOOR", cover:"IMG_5418.jpeg" }
+document.addEventListener("keydown", e => {
+  if (
+    e.key === "F12" ||
+    (e.ctrlKey && e.shiftKey && ["I","C","J"].includes(e.key)) ||
+    (e.ctrlKey && e.key === "U")
+  ) {
+    e.preventDefault();
+    document.body.innerHTML="";
+    location.href="about:blank";
+  }
+});
+
+// Detect devtools
+let devtools=false;
+setInterval(()=>{
+  if(window.outerWidth-window.innerWidth>160 || window.outerHeight-window.innerHeight>160){
+    if(!devtools){
+      devtools=true;
+      document.body.innerHTML="";
+      location.href="about:blank";
+    }
+  }
+},500);
+
+// ===== AUDIO PLAYER =====
+const overlay=document.getElementById("overlay");
+const audio=document.getElementById("audio");
+const bar=document.getElementById("bar");
+const time=document.getElementById("time");
+
+const songs=[
+  {src:"fwm.mp3",title:"FWM (Unreleased)",artist:"PARTYNEXTDOOR",cover:"IMG_5419.jpeg"},
+  {src:"loosemymind.mp3",title:"Loose My Mind",artist:"PARTYNEXTDOOR",cover:"IMG_5418.jpeg"}
 ];
 
-let currentSong = 0;
+let currentSong=0;
 
-function playSong(index){
-  const song = songs[index];
-  audio.src = song.src;
-  document.getElementById("songTitle").textContent = song.title;
-  document.getElementById("songArtist").textContent = song.artist;
-  document.getElementById("cover").src = song.cover;
+function playSong(i){
+  const s=songs[i];
+  audio.src=s.src;
+  songTitle.textContent=s.title;
+  songArtist.textContent=s.artist;
+  cover.src=s.cover;
   audio.play();
 }
 
-overlay.onclick = () => {
-  overlay.style.display = "none";
+overlay.onclick=()=>{
+  overlay.style.display="none";
   playSong(currentSong);
 };
 
-audio.onended = () => {
-  currentSong = (currentSong+1)%songs.length;
+audio.onended=()=>{
+  currentSong=(currentSong+1)%songs.length;
   playSong(currentSong);
 };
 
-audio.ontimeupdate = () => {
+audio.ontimeupdate=()=>{
   if(audio.duration){
-    bar.style.width = (audio.currentTime/audio.duration*100)+"%";
+    bar.style.width=(audio.currentTime/audio.duration*100)+"%";
   }
-  const m = Math.floor(audio.currentTime/60);
-  const s = Math.floor(audio.currentTime%60).toString().padStart(2,"0");
-  time.textContent = `${m}:${s}`;
+  let m=Math.floor(audio.currentTime/60);
+  let s=Math.floor(audio.currentTime%60).toString().padStart(2,"0");
+  time.textContent=`${m}:${s}`;
 };
 
-/* typing */
+// ===== TYPING TEXT =====
 const texts=["wag","kang","tanga","bobo!","tangina mo!"];
 let ti=0,ci=0,del=false;
+
 function type(){
   const el=document.getElementById("animatedText");
   if(!del && ci<texts[ti].length){
@@ -310,15 +294,17 @@ function type(){
 }
 type();
 
-/* profile views */
+// ===== VIEWS =====
 let views=localStorage.getItem("views")||0;
 views++;
 localStorage.setItem("views",views);
-document.getElementById("profileViews").textContent="XXX: "+views;
+profileViews.textContent="XXX: "+views;
 </script>
 
 </body>
 </html>
+
+
 
 
 
