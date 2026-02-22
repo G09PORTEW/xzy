@@ -19,7 +19,7 @@ body{
   color:white;
 }
 
-
+/* ===== BACKGROUND ===== */
 .bg{
   position:fixed;
   inset:0;
@@ -34,7 +34,7 @@ body{
   background:radial-gradient(circle, transparent 40%, rgba(0,0,0,0.85));
 }
 
-
+/* ===== OVERLAY ===== */
 .overlay{
   position:fixed;
   inset:0;
@@ -55,7 +55,7 @@ body{
   font-size:22px;
 }
 
-
+/* ===== PROFILE ===== */
 .profile{
   position:absolute;
   top:22%;
@@ -97,7 +97,7 @@ body{
 }
 .profile-views{margin-top:8px;font-size:12px;color:#ff4444;}
 
-
+/* ===== PLAYER ===== */
 .player{
   position:fixed;
   bottom:30px;
@@ -124,17 +124,17 @@ body{
 </style>
 
 <script>
-
+/* view-source troll */
 if(location.href.startsWith("view-source:")){
   document.open();
   document.write("<h1 style='color:red;background:black;text-align:center;margin-top:40vh;'>NO SKID BITCHHH</h1>");
   document.close();
 }
 
-
+/* disable right click */
 document.addEventListener("contextmenu",e=>e.preventDefault());
 
-
+/* disable keys */
 document.onkeydown=function(e){
   if(
     e.keyCode===123||
@@ -146,7 +146,7 @@ document.onkeydown=function(e){
   }
 };
 
-
+/* devtools detect */
 setInterval(()=>{
   if(window.outerWidth-window.innerWidth>160||window.outerHeight-window.innerHeight>160){
     document.body.innerHTML="<h1 style='color:red;text-align:center;margin-top:40vh;'>NO SKID BITCHHH</h1>";
@@ -222,7 +222,7 @@ audio.ontimeupdate=()=>{
  time.textContent=`${m}:${s}`;
 };
 
-
+/* typing */
 const texts=["wag","kang","tanga","bobo","tangina"];
 let ti=0,ci=0,del=false;
 function type(){
@@ -242,7 +242,7 @@ function type(){
 }
 type();
 
-
+/* views */
 let views=localStorage.getItem("views")||0;
 views++;
 localStorage.setItem("views",views);
@@ -251,6 +251,8 @@ profileViews.textContent="views: "+views;
 
 </body>
 </html>
+
+
 
 
 
